@@ -1,4 +1,5 @@
 ##Selenium Helper##
+[![CircleCI](https://circleci.com/gh/qld-gov-au/seleniumHelper.svg?style=svg)](https://circleci.com/gh/qld-gov-au/seleniumHelper)
 
 This library will load the correct Driver for your browser you choose and ensure that no browser is left behind when it closes
 
