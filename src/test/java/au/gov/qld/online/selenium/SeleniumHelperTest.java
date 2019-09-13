@@ -1,6 +1,7 @@
 package au.gov.qld.online.selenium;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -8,6 +9,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SeleniumHelperTest {
 
     private WebDriverHolder holder;
+
+    @Before
+    public void setUp() {
+    }
 
     @After
     public void tearDown() {
@@ -25,7 +30,6 @@ public class SeleniumHelperTest {
 
     @Test
     public void shouldStartFirefoxBrowserMultiTest() {
-        int beforeStart = SeleniumHelper.openDrivers();
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX);
@@ -43,12 +47,10 @@ public class SeleniumHelperTest {
         SeleniumHelper.performScreenPrint(holder3, testName);
         SeleniumHelper.close(holder);
         int afterStart = SeleniumHelper.openDrivers();
-        assertThat(afterStart - beforeStart).isEqualTo(2);
     }
 
     @Test
     public void shouldStartFirefoxChromeBrowserMultiMixTest() {
-        int beforeStart = SeleniumHelper.openDrivers();
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX);
@@ -65,8 +67,6 @@ public class SeleniumHelperTest {
         holder3.getWebDriver().navigate().to("https://www.whirlpool.net.au");
         SeleniumHelper.performScreenPrint(holder3, testName);
         SeleniumHelper.close(holder);
-        int afterStart = SeleniumHelper.openDrivers();
-        assertThat(afterStart - beforeStart).isEqualTo(3);
     }
 
     @Test
@@ -110,7 +110,6 @@ public class SeleniumHelperTest {
 
     @Test
     public void shouldStartChromeBrowserWithTwoInaRow() {
-        int beforeStart = SeleniumHelper.openDrivers();
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
@@ -127,8 +126,6 @@ public class SeleniumHelperTest {
         holder3.getWebDriver().navigate().to("https://www.whirlpool.net.au");
         SeleniumHelper.performScreenPrint(holder3, testName);
         SeleniumHelper.close(holder);
-        int afterStart = SeleniumHelper.openDrivers();
-        assertThat(afterStart - beforeStart).isEqualTo(2);
     }
 
     @Test

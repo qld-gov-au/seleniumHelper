@@ -108,7 +108,6 @@
                 <skipTests>${surefire.skip}</skipTests>
                 <systemPropertyVariables>
                     <!--<headless.disabled>false</headless.disabled>-->
-                    <headless.disabled>false</headless.disabled>
                 </systemPropertyVariables>
             </configuration>
         </plugin>

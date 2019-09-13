@@ -30,10 +30,8 @@ import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Locale;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import static org.openqa.selenium.Platform.MAC;
@@ -47,10 +45,10 @@ public final class SeleniumHelper {
     private static DriverService chromeService;
 
     //Keep list of released browsers to reuse until max usage is hit
-    private static Deque<WebDriverHolder> webDriverListReleased = new LinkedList<>();
+    private static Map<String, WebDriverHolder> webDriverListReleased = new ConcurrentHashMap<>();
     //Keep internal tabs on open browsers so when we die unexpectedly we don't leave orphaned browsers running on outside of jvm connection
-    private static Deque<WebDriver> webDriverListAll = new LinkedList<>();
-    private static Deque<DriverService> driverServiceAll = new LinkedList<>();
+    private static List<WebDriver> webDriverListAll = new LinkedList<>();
+    private static List<DriverService> driverServiceAll = new LinkedList<>();
     private static File screenprintFolder = new File("target/screenprints/" + new SimpleDateFormat("dd-M-yyyy", Locale.getDefault()).format(new Date()) + "/");
     private static File screenprintCurrentFolder = new File("target/screenprints/current");
     private static boolean doScreenPrints = false;
@@ -65,13 +63,21 @@ public final class SeleniumHelper {
         public void run() {
             for (WebDriver driver : webDriverListAll) {
                 if (driver != null) {
-                    driver.close();
-                    driver.quit();
+                    try {
+                        driver.close();
+                        driver.quit();
+                    } catch (RuntimeException e) {
+                        LOGGER.error("exception on close", e);
+                    }
                 }
             }
             for (DriverService service : driverServiceAll) {
                 if (service != null) {
-                    service.stop();
+                    try {
+                        service.stop();
+                    } catch (RuntimeException e) {
+                        LOGGER.error("exception on close", e);
+                    }
                 }
             }
         }
@@ -93,13 +99,19 @@ public final class SeleniumHelper {
             proxy.setSslProxy(System.getProperty("https_proxy", ""));
         }
         Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
+        try {
+            FileUtils.forceMkdir(screenprintFolder);
+            if (screenprintCurrentFolder.exists()) {
+                FileUtils.forceDelete(screenprintCurrentFolder);
+            }
+            Files.createSymbolicLink(Paths.get(screenprintCurrentFolder.getAbsolutePath()), Paths.get(screenprintFolder.getAbsolutePath()));
+        } catch (IOException e) {
+            LOGGER.error("could not create screenprint folder");
+        }
     }
 
-    private SeleniumHelper() throws IOException {
+    private SeleniumHelper() {
         //utility class
-        FileUtils.forceMkdir(screenprintFolder);
-        FileUtils.forceDelete(screenprintCurrentFolder);
-        Files.createSymbolicLink(Paths.get(screenprintCurrentFolder.getPath()), Paths.get(screenprintFolder.getPath()));
     }
 
     public static File getDestinationFolder() {
@@ -108,13 +120,16 @@ public final class SeleniumHelper {
 
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType) {
         //reuse any active session that was released
-        for (WebDriverHolder driver : webDriverListReleased) {
+        for (String key: webDriverListReleased.keySet()) {
+            WebDriverHolder driver = webDriverListReleased.get(key);
             if (driverType.equals(driver.getDriverType())) {
-                webDriverListReleased.remove(driver);
+                webDriverListReleased.remove(key);
                 return driver;
             }
         }
+
         WebDriver webDriver = null;
+
         try {
             final Platform platform = Platform.getCurrent();
             switch (driverType) {
@@ -229,7 +244,7 @@ public final class SeleniumHelper {
      * too many times, this may be true for other systems also.
      * @param webDriverHolder
      */
-    public static synchronized void close(WebDriverHolder webDriverHolder) {
+    public static void close(WebDriverHolder webDriverHolder) {
         if (webDriverHolder == null) {
             return;
         }
@@ -243,7 +258,7 @@ public final class SeleniumHelper {
             webDriverHolder.getWebDriver().close();
             webDriverHolder.getWebDriver().quit();
         } else {
-            webDriverListReleased.push(webDriverHolder);
+            webDriverListReleased.put(String.valueOf(webDriverHolder.hashCode()), webDriverHolder);
         }
     }
 
@@ -310,5 +325,9 @@ public final class SeleniumHelper {
 
     public static int openDrivers() {
         return webDriverListAll.size();
+    }
+
+    public static int webDriverReleasedSize() {
+        return webDriverListReleased.size();
     }
 }
