@@ -35,7 +35,7 @@
         <spotbugs-maven-plugin.version>3.1.12.2</spotbugs-maven-plugin.version>
         <spotbugs.version>3.1.11</spotbugs.version>
         <findsecbugs-plugin.version>1.9.0</findsecbugs-plugin.version>
-        <sb-contrib.version>7.4.5</sb-contrib.version>
+        <sb-contrib.version>7.4.6</sb-contrib.version>
         <jacoco.version>0.8.4</jacoco.version>
 
         <failsafe.skip>false</failsafe.skip>
