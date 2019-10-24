@@ -36,7 +36,7 @@
         <spotbugs.version>3.1.11</spotbugs.version>
         <findsecbugs-plugin.version>1.9.0</findsecbugs-plugin.version>
         <sb-contrib.version>7.4.7</sb-contrib.version>
-        <jacoco.version>0.8.4</jacoco.version>
+        <jacoco.version>0.8.5</jacoco.version>
 
         <failsafe.skip>false</failsafe.skip>
         <surefire.skip>false</surefire.skip>
