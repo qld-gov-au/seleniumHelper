@@ -16,15 +16,12 @@ jobs:
 
       - restore_cache: # restore the saved cache after the first run or if `pom.xml` has changed
           # Read about caching dependencies: https://circleci.
-          key: circleci-seleniumHelper-{{ checksum "pom.xml" }}
+          keys: 
+            - circleci-seleniumHelper-{{ checksum "pom.xml" }}
+            - circleci-seleniumHelper-
       
       - run: mvn dependency:go-offline # gets the project dependencies
       
-      - save_cache: # saves the project dependencies
-          paths:
-            - ~/.m2
-          key: circleci-seleniumHelper-{{ checksum "pom.xml" }}
-
       - run:
          name: Java version
          command: java -version
@@ -34,6 +31,12 @@ jobs:
       - run:
           name: mvn verify
           command: mvn verify # run the actual tests
+
+      - save_cache: # saves the project dependencies
+          paths:
+            - ~/.m2
+          key: circleci-seleniumHelper-{{ checksum "pom.xml" }}
+
       - run:
           name: make name easier
           command: cp target/seleniumHelper-*.jar seleniumHelper.jar # run the actual tests
