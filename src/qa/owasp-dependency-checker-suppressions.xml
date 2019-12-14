@@ -25,4 +25,18 @@ MISC - https://lists.apache.org/thread.html/308cc15f1f1dc53e97046fddbac240e6cd16
         <gav regex="true">^com\.squareup\.okhttp3:okhttp:.*$</gav>
         <cve>CVE-2018-20200</cve>
     </suppress>
+<suppress>
+   <notes><![CDATA[ This is latest version for now, ignoreing until they releas a new version of html unit driver
+   file name: htmlunit-core-js-2.36.0.jar
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/net\.sourceforge\.htmlunit/htmlunit\-core\-js@.*$</packageUrl>
+   <cve>CVE-2010-3359</cve>
+</suppress>
+<suppress>
+   <notes><![CDATA[ This is latest version for now, ignoreing until they releas a new version of html unit driver
+   file name: neko-htmlunit-2.36.0.jar
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/net\.sourceforge\.htmlunit/neko\-htmlunit@.*$</packageUrl>
+   <cve>CVE-2010-3359</cve>
+</suppress>
 </suppressions>
