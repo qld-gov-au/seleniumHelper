@@ -36,7 +36,7 @@ public class SeleniumHelperTest {
         WebDriverHolder holder2 = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX);
         holder.getWebDriver().navigate().to("https://www.google.com");
         SeleniumHelper.performScreenPrint(holder2, testName);
-        holder2.getWebDriver().navigate().to("https://www.qld.gov.au");
+        holder2.getWebDriver().navigate().to("https://example.com");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.performScreenPrint(holder2, testName);
         SeleniumHelper.close(holder);
@@ -57,7 +57,7 @@ public class SeleniumHelperTest {
         WebDriverHolder holder2 = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
         holder.getWebDriver().navigate().to("https://www.google.com");
         SeleniumHelper.performScreenPrint(holder2, testName);
-        holder2.getWebDriver().navigate().to("https://www.qld.gov.au");
+        holder2.getWebDriver().navigate().to("https://example.com");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.performScreenPrint(holder2, testName);
         SeleniumHelper.close(holder);
@@ -115,7 +115,7 @@ public class SeleniumHelperTest {
         holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
         holder.getWebDriver().navigate().to("https://www.google.com");
         WebDriverHolder holder2 = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
-        holder2.getWebDriver().navigate().to("https://www.qld.gov.au");
+        holder2.getWebDriver().navigate().to("https://example.com");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.performScreenPrint(holder2, testName);
         SeleniumHelper.close(holder);
