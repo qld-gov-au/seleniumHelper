@@ -24,7 +24,7 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX);
-        holder.getWebDriver().navigate().to("https://www.google.com");
+        holder.getWebDriver().navigate().to("https://example.com");
         SeleniumHelper.performScreenPrint(holder, testName);
     }
 
@@ -34,7 +34,7 @@ public class SeleniumHelperTest {
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX);
         WebDriverHolder holder2 = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX);
-        holder.getWebDriver().navigate().to("https://www.google.com");
+        holder.getWebDriver().navigate().to("https://example2.com/");
         SeleniumHelper.performScreenPrint(holder2, testName);
         holder2.getWebDriver().navigate().to("https://example.com");
         SeleniumHelper.performScreenPrint(holder, testName);
@@ -55,7 +55,7 @@ public class SeleniumHelperTest {
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX);
         WebDriverHolder holder2 = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
-        holder.getWebDriver().navigate().to("https://www.google.com");
+        holder.getWebDriver().navigate().to("https://example2.com");
         SeleniumHelper.performScreenPrint(holder2, testName);
         holder2.getWebDriver().navigate().to("https://example.com");
         SeleniumHelper.performScreenPrint(holder, testName);
@@ -75,7 +75,7 @@ public class SeleniumHelperTest {
         SeleniumHelper.setDoScreenPrints(true);
         try {
             holder = SeleniumHelper.getWebDriver(DriverTypes.EDGE);
-            holder.getWebDriver().navigate().to("https://www.google.com");
+            holder.getWebDriver().navigate().to("https://example2.com");
             SeleniumHelper.performScreenPrint(holder, testName);
         } catch (RuntimeException e) {
             //expected when not on windows
@@ -90,7 +90,7 @@ public class SeleniumHelperTest {
         SeleniumHelper.setDoScreenPrints(true);
         try {
             holder = SeleniumHelper.getWebDriver(DriverTypes.SAFARI);
-            holder.getWebDriver().navigate().to("https://www.google.com");
+            holder.getWebDriver().navigate().to("https://example2.com");
             SeleniumHelper.performScreenPrint(holder, testName);
         } catch (RuntimeException e) {
             assertThat(e.getMessage()).isEqualTo("Have to be on Mac to run Safari");
@@ -103,7 +103,7 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
-        holder.getWebDriver().navigate().to("https://www.google.com");
+        holder.getWebDriver().navigate().to("https://example2.com");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.close(holder);
     }
@@ -113,7 +113,7 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
-        holder.getWebDriver().navigate().to("https://www.google.com");
+        holder.getWebDriver().navigate().to("https://example2.com");
         WebDriverHolder holder2 = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
         holder2.getWebDriver().navigate().to("https://example.com");
         SeleniumHelper.performScreenPrint(holder, testName);
@@ -133,7 +133,7 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.HtmlUnitDriver);
-        holder.getWebDriver().navigate().to("https://www.google.com");
+        holder.getWebDriver().navigate().to("https://example2.com");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.close(holder);
     }
@@ -143,7 +143,7 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.HtmlUnitDriverWithJS);
-        holder.getWebDriver().navigate().to("https://www.google.com");
+        holder.getWebDriver().navigate().to("https://example2.com");
         SeleniumHelper.performScreenPrint(holder, testName);
     }
 }
