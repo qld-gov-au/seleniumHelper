@@ -26,11 +26,18 @@ MISC - https://lists.apache.org/thread.html/308cc15f1f1dc53e97046fddbac240e6cd16
         <cve>CVE-2018-20200</cve>
     </suppress>
 <suppress>
-   <notes><![CDATA[ 
+   <notes><![CDATA[
    This is latest version for now, ignoreing until they releas a new version of html unit driver
    file name: htmlunit-core-js-2.36.0.jar
    file name: neko-htmlunit-2.36.0.jar
    ]]></notes>
    <cve>CVE-2010-3359</cve>
 </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: htmlunit-cssparser-1.5.0.jar, regex for cve CVE-2020-5529 is htmlunit* which hits cssparser
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/net\.sourceforge\.htmlunit/htmlunit\-cssparser@.*$</packageUrl>
+        <cpe>cpe:/a:htmlunit_project:htmlunit</cpe>
+    </suppress>
 </suppressions>
