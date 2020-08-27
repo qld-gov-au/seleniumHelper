@@ -16,7 +16,7 @@ public class SeleniumHelperTest {
 
     @After
     public void tearDown() {
-        SeleniumHelper.close(holder);
+        SeleniumHelper.close(holder, true);
     }
 
     @Test

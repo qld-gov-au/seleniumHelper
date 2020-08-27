@@ -40,7 +40,8 @@ import static org.openqa.selenium.Platform.WINDOWS;
 public final class SeleniumHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final int MAX_BROWSER_USAGE = 10;
+
+    private static int maxBrowserUsage = 10;
 
     private static DriverService chromeService;
 
@@ -244,22 +245,34 @@ public final class SeleniumHelper {
      * too many times, this may be true for other systems also.
      * @param webDriverHolder
      */
-    public static void close(WebDriverHolder webDriverHolder) {
+    public static void close(WebDriverHolder webDriverHolder, boolean clearCookies) {
         if (webDriverHolder == null) {
             return;
         }
 
         WebDriver driver = webDriverHolder.getWebDriver();
-        driver.manage().deleteAllCookies();
+        if (clearCookies) {
+            driver.manage().deleteAllCookies();
+        }
 
         driver.navigate().to("about:blank");
 
-        if (webDriverHolder.incrementUsed() > MAX_BROWSER_USAGE) {
+        if (webDriverHolder.incrementUsed() > maxBrowserUsage) {
             webDriverHolder.getWebDriver().close();
             webDriverHolder.getWebDriver().quit();
         } else {
             webDriverListReleased.put(String.valueOf(webDriverHolder.hashCode()), webDriverHolder);
         }
+    }
+
+    /**
+     * If this is called, we will put the browser into the unused pool or destroy it if used more than 10 times
+     * We have found that the WAF's on uat.identity.qld.gov.au does not like it if it sees the same browser fingerprint
+     * too many times, this may be true for other systems also.
+     * @param webDriverHolder
+     */
+    public static void close(WebDriverHolder webDriverHolder) {
+        close(webDriverHolder, true);
     }
 
     /**
@@ -330,4 +343,13 @@ public final class SeleniumHelper {
     public static int webDriverReleasedSize() {
         return webDriverListReleased.size();
     }
+
+    public static int getMaxBrowserUsage() {
+        return maxBrowserUsage;
+    }
+
+    public static void setMaxBrowserUsage(int maxBrowserUsage) {
+        SeleniumHelper.maxBrowserUsage = maxBrowserUsage;
+    }
+
 }

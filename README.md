@@ -16,3 +16,9 @@ Environment Args that you can use:
 
 * http.proxyHost, https.proxyHost
   These variables are passed through to the browser it seems
+
+
+###Change log###
+
+Allow hand off without deleting cookies
+Allow browser reuse to be changed from default 10 to your preferred usage.
