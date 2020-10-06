@@ -329,7 +329,7 @@ public final class SeleniumHelper {
 
         WebDriverManager.chromedriver().setup();
         chromeService = new ChromeDriverService.Builder()
-            .usingDriverExecutable(new File(WebDriverManager.chromedriver().getBinaryPath()))
+            .usingDriverExecutable(new File(WebDriverManager.chromedriver().getDownloadedDriverPath()))
             .usingAnyFreePort()
             .build();
         driverServiceAll.add(chromeService);
