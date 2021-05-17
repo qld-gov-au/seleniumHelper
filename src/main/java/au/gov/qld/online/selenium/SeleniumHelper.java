@@ -13,6 +13,7 @@ import org.openqa.selenium.edge.EdgeDriverService;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.service.DriverService;
@@ -189,6 +190,10 @@ public final class SeleniumHelper {
                     } else {
                         throw new IllegalStateException("Have to be on Mac to run Safari");
                     }
+                    break;
+                case PHANTOMJS:
+                    WebDriverManager.phantomjs().setup();
+                    webDriver = new PhantomJSDriver();
                     break;
                 case HtmlUnitDriverWithJS:
                     webDriver = createHtmlUnitDriver(true);

@@ -99,6 +99,20 @@ public class SeleniumHelperTest {
     }
 
     @Test
+    public void shouldStartPhantomJSBrowser() {
+        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+        SeleniumHelper.setDoScreenPrints(true);
+//        try {
+            holder = SeleniumHelper.getWebDriver(DriverTypes.PHANTOMJS);
+            holder.getWebDriver().navigate().to("https://example2.com/");
+            SeleniumHelper.performScreenPrint(holder, testName);
+//        } catch (RuntimeException e) {
+//            assertThat(e.getMessage()).isEqualTo("Have to be on Mac to run Safari");
+//            assertThat(e).isInstanceOf(IllegalStateException.class);
+//        }
+    }
+
+    @Test
     public void shouldStartChromeBrowser() {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);

@@ -16,3 +16,4 @@ package-lock.json
 .factorypath
 .attach_pid*
 *.swp
+phantomjsdriver.log
