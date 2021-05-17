@@ -68,7 +68,7 @@ public final class SeleniumHelper {
                     try {
                         driver.close();
                         driver.quit();
-                    } catch (RuntimeException e) {
+                    } catch (Exception e) {
                         LOGGER.error("exception on close", e);
                     }
                 }
@@ -77,7 +77,7 @@ public final class SeleniumHelper {
                 if (service != null) {
                     try {
                         service.stop();
-                    } catch (RuntimeException e) {
+                    } catch (Exception e) {
                         LOGGER.error("exception on close", e);
                     }
                 }
