@@ -193,11 +193,7 @@ public final class SeleniumHelper {
                     break;
                 case PHANTOMJS:
                     WebDriverManager.phantomjs().setup();
-                    if (new File(WebDriverManager.phantomjs().getDownloadedDriverPath()).exists()) {
-                        webDriver = new PhantomJSDriver();
-                    } else {
-                        throw new IllegalStateException("Can't find PhantomJS for system");
-                    }
+                    webDriver = new PhantomJSDriver();
                     break;
                 case HtmlUnitDriverWithJS:
                     webDriver = createHtmlUnitDriver(true);
