@@ -193,7 +193,11 @@ public final class SeleniumHelper {
                     break;
                 case PHANTOMJS:
                     WebDriverManager.phantomjs().setup();
-                    webDriver = new PhantomJSDriver();
+                    if (new File(WebDriverManager.phantomjs().getDownloadedDriverPath()).exists()) {
+                        webDriver = new PhantomJSDriver();
+                    } else {
+                        throw new IllegalStateException("Can't find PhantomJS for system");
+                    }
                     break;
                 case HtmlUnitDriverWithJS:
                     webDriver = createHtmlUnitDriver(true);
@@ -263,8 +267,12 @@ public final class SeleniumHelper {
         driver.navigate().to("about:blank");
 
         if (webDriverHolder.incrementUsed() > maxBrowserUsage) {
-            webDriverHolder.getWebDriver().close();
-            webDriverHolder.getWebDriver().quit();
+            try {
+                webDriverHolder.getWebDriver().close();
+                webDriverHolder.getWebDriver().quit();
+            } catch (Exception e) {
+                LOGGER.error("Error Message: ", e);
+            }
         } else {
             webDriverListReleased.put(String.valueOf(webDriverHolder.hashCode()), webDriverHolder);
         }
