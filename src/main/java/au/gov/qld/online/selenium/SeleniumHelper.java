@@ -13,7 +13,6 @@ import org.openqa.selenium.edge.EdgeDriverService;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.service.DriverService;
@@ -131,7 +130,7 @@ public final class SeleniumHelper {
         }
 
         WebDriver webDriver = null;
-
+        WebDriverManager wdm;
         try {
             final Platform platform = Platform.getCurrent();
             switch (driverType) {
@@ -146,7 +145,8 @@ public final class SeleniumHelper {
                     webDriver = new RemoteWebDriver(chromeService.getUrl(), chromeOptions);
                     break;
                 case FIREFOX:
-                    WebDriverManager.firefoxdriver().setup();
+                    wdm = WebDriverManager.firefoxdriver();
+                    wdm.setup();
                     final FirefoxOptions firefoxOptions = new FirefoxOptions();
                     if (headlessEnabled) {
                         firefoxOptions.setHeadless(true);
@@ -163,7 +163,8 @@ public final class SeleniumHelper {
                     break;
                 case EDGE:
                     if (platform.is(WINDOWS)) {
-                        WebDriverManager.edgedriver().setup();
+                        wdm = WebDriverManager.edgedriver();
+                        wdm.setup();
                         final EdgeOptions edgeOptions = new EdgeOptions();
                         if (proxy != null) {
                             edgeOptions.setProxy(proxy);
@@ -177,7 +178,8 @@ public final class SeleniumHelper {
                     break;
                 case SAFARI:
                     if (platform.is(MAC)) {
-                        WebDriverManager.edgedriver().setup();
+                        wdm = WebDriverManager.edgedriver();
+                        wdm.setup();
                         DesiredCapabilities safariCapabilities = new DesiredCapabilities();
                         final SafariOptions safariOptions = new SafariOptions();
                         safariOptions.merge(safariCapabilities);
@@ -190,10 +192,6 @@ public final class SeleniumHelper {
                     } else {
                         throw new IllegalStateException("Have to be on Mac to run Safari");
                     }
-                    break;
-                case PHANTOMJS:
-                    WebDriverManager.phantomjs().setup();
-                    webDriver = new PhantomJSDriver();
                     break;
                 case HtmlUnitDriverWithJS:
                     webDriver = createHtmlUnitDriver(true);
@@ -336,9 +334,10 @@ public final class SeleniumHelper {
             return;
         }
 
-        WebDriverManager.chromedriver().setup();
+        WebDriverManager wdm = WebDriverManager.chromedriver();
+        wdm.setup();
         chromeService = new ChromeDriverService.Builder()
-            .usingDriverExecutable(new File(WebDriverManager.chromedriver().getDownloadedDriverPath()))
+            .usingDriverExecutable(new File(wdm.getDownloadedDriverPath()))
             .usingAnyFreePort()
             .build();
         driverServiceAll.add(chromeService);

@@ -5,7 +5,6 @@ public enum DriverTypes {
     FIREFOX,
     EDGE,
     SAFARI,
-    PHANTOMJS,
     HtmlUnitDriver,
     HtmlUnitDriverWithJS
 }
