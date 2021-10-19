@@ -2,7 +2,6 @@ package au.gov.qld.online.selenium;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -96,21 +95,6 @@ public class SeleniumHelperTest {
         } catch (RuntimeException e) {
             assertThat(e.getMessage()).isEqualTo("Have to be on Mac to run Safari");
             assertThat(e).isInstanceOf(IllegalStateException.class);
-        }
-    }
-
-    @Ignore("CICD fails to start/stop PhantomJS, works fine on mac")
-    @Test
-    public void shouldStartPhantomJSBrowser() {
-        try {
-            String testName = new Object(){}.getClass().getEnclosingMethod().getName();
-            SeleniumHelper.setDoScreenPrints(true);
-            holder = SeleniumHelper.getWebDriver(DriverTypes.PHANTOMJS);
-            holder.getWebDriver().navigate().to("https://example2.com/");
-            SeleniumHelper.performScreenPrint(holder, testName);
-        } catch (RuntimeException e) {
-            //PhantomJS needs to be installed to run
-            //skipping
         }
     }
 
