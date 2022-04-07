@@ -4,13 +4,13 @@
 
     <groupId>au.gov.qld.online</groupId>
     <artifactId>seleniumHelper</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6-SNAPSHOT</version>
 
     <scm>
         <url>https://github.com/qld-gov-au/seleniumHelper</url>
         <connection>scm:git:https://github.com/qld-gov-au/seleniumHelper.git</connection>
         <developerConnection>scm:git:https://github.com/qld-gov-au/seleniumHelper.git</developerConnection>
-        <tag>seleniumHelper-1.0.5</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
