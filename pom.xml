@@ -4,7 +4,7 @@
 
     <groupId>au.gov.qld.online</groupId>
     <artifactId>seleniumHelper</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.0.7</version>
 
     <scm>
         <url>https://github.com/qld-gov-au/seleniumHelper</url>
@@ -49,27 +49,38 @@
         <sonar.java.checkstyle.reportPaths>${project.build.directory}/checkstyle-result.xml</sonar.java.checkstyle.reportPaths>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency><groupId>com.google.code.findbugs</groupId><artifactId>jsr305</artifactId><version>3.0.2</version></dependency>
+            <dependency><groupId>org.apache.httpcomponents</groupId><artifactId>httpclient</artifactId><version>4.5.13</version></dependency>
+            <dependency><groupId>org.apache.httpcomponents.client5</groupId><artifactId>httpclient5</artifactId><version>5.1.3</version></dependency>
+            <dependency><groupId>commons-io</groupId><artifactId>commons-io</artifactId><version>2.10.0</version></dependency>
+            <dependency><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-annotations</artifactId><version>2.13.2</version></dependency>
+            <dependency><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId><version>1.2</version></dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <!-- overrides of wdm docker features -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.13.2.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.70</version>
-        </dependency>
+        <dependency><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-databind</artifactId><version>2.13.2.2</version></dependency>
+        <dependency><groupId>org.bouncycastle</groupId><artifactId>bcprov-jdk15on</artifactId><version>1.70</version></dependency>
 
         <dependency><groupId>io.github.bonigarcia</groupId><artifactId>webdrivermanager</artifactId><version>5.1.1</version>
         <exclusions>
-            <exclusion>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-java</artifactId>
-            </exclusion>
+            <exclusion><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-java</artifactId></exclusion>
+            <exclusion><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></exclusion>
+            <exclusion><groupId>com.google.guava</groupId><artifactId>guava</artifactId></exclusion>
+            <exclusion><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-databind</artifactId></exclusion>
+            <exclusion><groupId>org.bouncycastle</groupId><artifactId>bcprov-jdk15on</artifactId></exclusion>
+            <exclusion><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-client</artifactId></exclusion>
+            <exclusion><groupId>org.eclipse.jetty</groupId><artifactId>jetty-util</artifactId></exclusion>
+            <exclusion><groupId>org.eclipse.jetty</groupId><artifactId>jetty-http</artifactId></exclusion>
+            <exclusion><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-common</artifactId></exclusion>
+            <exclusion><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-api</artifactId></exclusion>
+            <exclusion><groupId>org.eclipse.jetty</groupId><artifactId>jetty-io</artifactId></exclusion>
         </exclusions></dependency>
+
+        <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>1.7.36</version></dependency>
         <dependency><groupId>com.google.guava</groupId><artifactId>guava</artifactId><version>31.1-jre</version></dependency>
         <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-java</artifactId><version>3.141.59</version>
             <exclusions>
@@ -83,11 +94,32 @@
         </dependency>
         <dependency><scope>test</scope><groupId>junit</groupId><artifactId>junit</artifactId><version>4.13.2</version></dependency>
         <dependency><scope>test</scope><groupId>org.assertj</groupId><artifactId>assertj-core</artifactId><version>3.22.0</version></dependency>
-        <dependency><scope>test</scope><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><version>1.2.11</version></dependency>
+        <dependency><scope>test</scope><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><version>1.2.11</version>
+        <exclusions>
+            <exclusion><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></exclusion>
+        </exclusions>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+        <plugin>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+                <execution>
+                    <id>enforce</id>
+                    <configuration>
+                        <rules>
+                            <dependencyConvergence />
+                        </rules>
+                    </configuration>
+                    <goals>
+                        <goal>enforce</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
         <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>${maven-compiler-plugin.version}</version>
