@@ -4,13 +4,13 @@
 
     <groupId>au.gov.qld.online</groupId>
     <artifactId>seleniumHelper</artifactId>
-    <version>1.0.9-SNAPSHOT</version>
+    <version>4.1.4</version>
 
     <scm>
         <url>https://github.com/qld-gov-au/seleniumHelper</url>
         <connection>scm:git:https://github.com/qld-gov-au/seleniumHelper.git</connection>
         <developerConnection>scm:git:https://github.com/qld-gov-au/seleniumHelper.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v4.1.4</tag>
     </scm>
 
     <distributionManagement>
@@ -25,7 +25,7 @@
             <url>https://nexus.tools.services.qld.gov.au/nexus/repository/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-    
+
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
