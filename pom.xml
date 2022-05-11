@@ -41,7 +41,7 @@
         <maven-pmd-plugin.version>3.16.0</maven-pmd-plugin.version>
         <owasp.dependency-check-maven.version>7.1.0</owasp.dependency-check-maven.version>
 
-        <io.netty.version>4.1.76.Final</io.netty.version>
+        <io.netty.version>4.1.77.Final</io.netty.version>
 
         <qa.directory>${project.basedir}/src/qa</qa.directory>
         <checkstyle.version>3.1.2</checkstyle.version>
