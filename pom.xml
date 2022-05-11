@@ -27,6 +27,7 @@
     </distributionManagement>
 
     <properties>
+        <javaModuleName>au.gov.qld.online.seleniumHelper</javaModuleName>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <resource.delimiter>@</resource.delimiter>
@@ -575,25 +576,185 @@
             </build>
         </profile>
         <profile>
-            <id>internalRepo</id>
+            <id>java17</id>
             <activation>
-                <property>
-                    <name>useInternalRepo</name>
-                    <value>true</value>
-                </property>
+                <jdk>17</jdk>
             </activation>
-            <distributionManagement>
-                <repository>
-                    <id>nexus</id>
-                    <name>Nexus</name>
-                    <url>https://nexus.tools.services.qld.gov.au/nexus/repository/releases</url>
-                </repository>
-                <snapshotRepository>
-                    <id>nexus</id>
-                    <name>Nexus</name>
-                    <url>https://nexus.tools.services.qld.gov.au/nexus/repository/snapshots</url>
-                </snapshotRepository>
-            </distributionManagement>
+            <properties>
+                <!-- Not use alpn agent as Java11+ supports alpn out of the box -->
+                <argLine.alpnAgent />
+                <argLine.java9.extras />
+                <!-- Export some stuff which is used during our tests -->
+                <argLine.java9>--illegal-access=deny ${argLine.java9.extras}</argLine.java9>
+                <forbiddenapis.skip>true</forbiddenapis.skip>
+                <!-- 1.4.x does not work in Java10+ -->
+                <jboss.marshalling.version>2.0.5.Final</jboss.marshalling.version>
+                <!-- This is the minimum supported by Java12+ -->
+                <maven.compiler.source>1.7</maven.compiler.source>
+                <maven.compiler.target>1.7</maven.compiler.target>
+                <!-- pax-exam does not work on latest Java12 EA 22 build -->
+                <skipOsgiTestsuite>true</skipOsgiTestsuite>
+            </properties>
+        </profile>
+
+        <!-- JDK16 -->
+        <profile>
+            <id>java16</id>
+            <activation>
+                <jdk>16</jdk>
+            </activation>
+            <properties>
+                <!-- Not use alpn agent as Java11+ supports alpn out of the box -->
+                <argLine.alpnAgent />
+                <argLine.java9.extras />
+                <!-- Export some stuff which is used during our tests -->
+                <argLine.java9>--illegal-access=deny ${argLine.java9.extras}</argLine.java9>
+                <forbiddenapis.skip>true</forbiddenapis.skip>
+                <!-- 1.4.x does not work in Java10+ -->
+                <jboss.marshalling.version>2.0.5.Final</jboss.marshalling.version>
+                <!-- This is the minimum supported by Java12+ -->
+                <maven.compiler.source>1.7</maven.compiler.source>
+                <maven.compiler.target>1.7</maven.compiler.target>
+                <!-- pax-exam does not work on latest Java12 EA 22 build -->
+                <skipOsgiTestsuite>true</skipOsgiTestsuite>
+            </properties>
+        </profile>
+
+        <!-- JDK15 -->
+        <profile>
+            <id>java15</id>
+            <activation>
+                <jdk>15</jdk>
+            </activation>
+            <properties>
+                <argLine.java9.extras />
+                <!-- Export some stuff which is used during our tests -->
+                <argLine.java9>--illegal-access=deny ${argLine.java9.extras}</argLine.java9>
+                <!-- Not use alpn agent as Java11+ supports alpn out of the box -->
+                <argLine.alpnAgent />
+                <forbiddenapis.skip>true</forbiddenapis.skip>
+                <!-- This is the minimum supported by Java12+ -->
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+                <!-- pax-exam does not work on latest Java12 EA 22 build -->
+                <skipOsgiTestsuite>true</skipOsgiTestsuite>
+            </properties>
+        </profile>
+        <!-- JDK14 -->
+        <profile>
+            <id>java14</id>
+            <activation>
+                <jdk>14</jdk>
+            </activation>
+            <properties>
+                <argLine.java9.extras />
+                <!-- Export some stuff which is used during our tests -->
+                <argLine.java9>--illegal-access=deny ${argLine.java9.extras}</argLine.java9>
+                <!-- Not use alpn agent as Java11+ supports alpn out of the box -->
+                <argLine.alpnAgent />
+                <forbiddenapis.skip>true</forbiddenapis.skip>
+                <!-- This is the minimum supported by Java12+ -->
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+                <!-- pax-exam does not work on latest Java12 EA 22 build -->
+                <skipOsgiTestsuite>true</skipOsgiTestsuite>
+            </properties>
+        </profile>
+        <!-- JDK13 -->
+        <profile>
+            <id>java13</id>
+            <activation>
+                <jdk>13</jdk>
+            </activation>
+            <properties>
+                <argLine.java9.extras />
+                <!-- Export some stuff which is used during our tests -->
+                <argLine.java9>--illegal-access=deny ${argLine.java9.extras}</argLine.java9>
+                <!-- Not use alpn agent as Java11+ supports alpn out of the box -->
+                <argLine.alpnAgent />
+                <forbiddenapis.skip>true</forbiddenapis.skip>
+                <!-- This is the minimum supported by Java12+ -->
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+                <!-- pax-exam does not work on latest Java12 EA 22 build -->
+                <skipOsgiTestsuite>true</skipOsgiTestsuite>
+            </properties>
+        </profile>
+
+        <!-- JDK12 -->
+        <profile>
+            <id>java12</id>
+            <activation>
+                <jdk>12</jdk>
+            </activation>
+            <properties>
+                <argLine.java9.extras />
+                <!-- Export some stuff which is used during our tests -->
+                <argLine.java9>--illegal-access=deny ${argLine.java9.extras}</argLine.java9>
+                <!-- Not use alpn agent as Java11+ supports alpn out of the box -->
+                <argLine.alpnAgent />
+                <forbiddenapis.skip>true</forbiddenapis.skip>
+                <!-- This is the minimum supported by Java12+ -->
+                <maven.compiler.source>1.7</maven.compiler.source>
+                <maven.compiler.target>1.7</maven.compiler.target>
+                <!-- pax-exam does not work on latest Java12 EA 22 build -->
+                <skipOsgiTestsuite>true</skipOsgiTestsuite>
+            </properties>
+        </profile>
+
+        <!-- JDK11 -->
+        <profile>
+            <id>java11</id>
+            <activation>
+                <jdk>11</jdk>
+            </activation>
+            <properties>
+                <argLine.java9.extras />
+                <!-- Export some stuff which is used during our tests -->
+                <argLine.java9>--illegal-access=deny ${argLine.java9.extras}</argLine.java9>
+                <!-- Not use alpn agent as Java11+ supports alpn out of the box -->
+                <argLine.alpnAgent />
+                <forbiddenapis.skip>true</forbiddenapis.skip>
+                <!-- pax-exam does not work on latest Java11 build -->
+                <skipOsgiTestsuite>true</skipOsgiTestsuite>
+            </properties>
+        </profile>
+
+        <!-- JDK10 -->
+        <profile>
+            <id>java10</id>
+            <activation>
+                <jdk>10</jdk>
+            </activation>
+            <properties>
+                <argLine.java9.extras />
+                <!-- Export some stuff which is used during our tests -->
+                <argLine.java9>--illegal-access=deny --add-modules java.xml.bind ${argLine.java9.extras}</argLine.java9>
+                <!-- Not use alpn agent as Java10 supports alpn out of the box -->
+                <argLine.alpnAgent />
+                <forbiddenapis.skip>true</forbiddenapis.skip>
+                <!-- Needed because of https://issues.apache.org/jira/browse/MENFORCER-275 -->
+                <enforcer.plugin.version>3.0.0-M3</enforcer.plugin.version>
+            </properties>
+        </profile>
+
+        <!-- JDK9 -->
+        <profile>
+            <id>java9</id>
+            <properties>
+                <argLine.java9.extras />
+                <!-- Export some stuff which is used during our tests -->
+                <argLine.java9>--illegal-access=deny --add-modules java.xml.bind ${argLine.java9.extras}</argLine.java9>
+                <!-- Not use alpn agent as Java9 supports alpn out of the box -->
+                <argLine.alpnAgent />
+                <!-- Skip as maven plugin not works with Java9 yet -->
+                <forbiddenapis.skip>true</forbiddenapis.skip>
+                <!-- Needed because of https://issues.apache.org/jira/browse/MENFORCER-275 -->
+                <enforcer.plugin.version>3.0.0-M1</enforcer.plugin.version>
+            </properties>
+            <activation>
+                <jdk>9</jdk>
+            </activation>
         </profile>
     </profiles>
 </project>
