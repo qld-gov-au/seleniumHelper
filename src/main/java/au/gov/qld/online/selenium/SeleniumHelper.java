@@ -30,9 +30,9 @@ import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 import static org.openqa.selenium.Platform.MAC;
 import static org.openqa.selenium.Platform.WINDOWS;
@@ -59,6 +59,7 @@ public final class SeleniumHelper {
     /**
      * This cleans up anything that used this helper class
      */
+    @SuppressWarnings("PMD.UseTryWithResources") //can't as its a list opened in another place
     private static final Thread CLOSE_THREAD = new Thread() {
         @Override
         public void run() {
@@ -78,6 +79,8 @@ public final class SeleniumHelper {
                         service.stop();
                     } catch (Exception e) {
                         LOGGER.error("exception on close", e);
+                    } finally {
+                        service.close();
                     }
                 }
             }
@@ -119,6 +122,7 @@ public final class SeleniumHelper {
         return screenprintFolder;
     }
 
+    @SuppressWarnings("PMD.CloseResource") //CloseResource is done on CLOSE_THREAD
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType) {
         //reuse any active session that was released
         for (String key: webDriverListReleased.keySet()) {
@@ -204,7 +208,7 @@ public final class SeleniumHelper {
             }
 
             webDriver.manage().deleteAllCookies();
-            webDriver.manage().timeouts().pageLoadTimeout(360, TimeUnit.SECONDS);
+            webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(360));
             webDriver.manage().window().maximize();
             Dimension maximizeDim = webDriver.manage().window().getSize();
             LOGGER.info("Size of screen. Height: " + maximizeDim.getHeight() + ", Width:" + maximizeDim.getWidth());
@@ -291,7 +295,8 @@ public final class SeleniumHelper {
         WebDriver driver = webDriverHolder.getWebDriver();
         if (webDriverHolder.getBrowserName().equalsIgnoreCase(DriverTypes.CHROME.name())) {
             driver.navigate().to("chrome://settings/clearBrowserData");
-            WebDriverWait waiter = new WebDriverWait(driver, 30, 500);
+
+            WebDriverWait waiter = new WebDriverWait(driver, Duration.ofSeconds(30), Duration.ofSeconds(500));
             String ccs = "* /deep/ #clearBrowsingDataConfirm";
             waiter.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(ccs)));
             driver.findElement(By.cssSelector("* /deep/ #clearBrowsingDataConfirm")).click();
