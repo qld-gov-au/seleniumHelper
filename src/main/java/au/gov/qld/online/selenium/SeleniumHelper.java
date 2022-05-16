@@ -108,6 +108,7 @@ public final class SeleniumHelper {
             if (screenprintCurrentFolder.exists()) {
                 FileUtils.forceDelete(screenprintCurrentFolder);
             }
+            screenprintFolder.setWritable(true);
             Files.createSymbolicLink(Paths.get(screenprintCurrentFolder.getAbsolutePath()), Paths.get(screenprintFolder.getAbsolutePath()));
         } catch (IOException e) {
             LOGGER.error("could not create screenprint folder");
