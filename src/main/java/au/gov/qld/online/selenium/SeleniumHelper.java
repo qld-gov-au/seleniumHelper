@@ -99,8 +99,9 @@ public final class SeleniumHelper {
         if (StringUtils.isNotBlank(System.getProperty("http_proxy"))) {
             LOGGER.debug("proxy enabled");
             proxy = new Proxy();
-            proxy.setHttpProxy(System.getProperty("http_proxy", ""));
-            proxy.setSslProxy(System.getProperty("https_proxy", ""));
+            proxy.setProxyType(Proxy.ProxyType.MANUAL);
+            proxy.setHttpProxy(System.getProperty("http_proxy", "").replaceAll("http.*?://", ""));
+            proxy.setSslProxy(System.getProperty("https_proxy", "").replaceAll("http.*?://", ""));
         }
         Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
         try {
@@ -145,6 +146,9 @@ public final class SeleniumHelper {
                     final ChromeOptions chromeOptions = new ChromeOptions();
                     if (headlessEnabled) {
                         chromeOptions.setHeadless(true);
+                    }
+                    if (proxy != null) {
+                        chromeOptions.setProxy(proxy);
                     }
                     chromeOptions.merge(capabilities);
                     webDriver = new RemoteWebDriver(chromeService.getUrl(), chromeOptions);
