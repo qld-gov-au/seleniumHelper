@@ -120,6 +120,10 @@ public final class SeleniumHelper {
     }
 
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType) {
+        return getWebDriver(driverType, null);
+    }
+
+    public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType, String downloadDirectory) {
         //reuse any active session that was released
         for (String key: webDriverListReleased.keySet()) {
             WebDriverHolder driver = webDriverListReleased.get(key);
@@ -141,6 +145,9 @@ public final class SeleniumHelper {
                     if (headlessEnabled) {
                         chromeOptions.setHeadless(true);
                     }
+                    if (downloadDirectory != null) {
+                        chromeOptions.setExperimentalOption("browser.download.dir", downloadDirectory);
+                    }
                     chromeOptions.merge(capabilities);
                     webDriver = new RemoteWebDriver(chromeService.getUrl(), chromeOptions);
                     break;
@@ -153,6 +160,9 @@ public final class SeleniumHelper {
                     }
                     if (proxy != null) {
                         firefoxOptions.setProxy(proxy);
+                    }
+                    if (downloadDirectory != null) {
+                        firefoxOptions.addPreference("browser.download.dir", downloadDirectory);
                     }
                     GeckoDriverService geckoDriverService = new GeckoDriverService.Builder().usingAnyFreePort().build();
                     geckoDriverService.start();
@@ -168,6 +178,9 @@ public final class SeleniumHelper {
                         final EdgeOptions edgeOptions = new EdgeOptions();
                         if (proxy != null) {
                             edgeOptions.setProxy(proxy);
+                        }
+                        if (downloadDirectory != null) {
+                            edgeOptions.setExperimentalOption("browser.download.dir", downloadDirectory);
                         }
                         EdgeDriverService edgeDriverService = new EdgeDriverService.Builder().usingAnyFreePort().build();
                         driverServiceAll.add(edgeDriverService);
@@ -185,6 +198,9 @@ public final class SeleniumHelper {
                         safariOptions.merge(safariCapabilities);
                         if (proxy != null) {
                             safariOptions.setProxy(proxy);
+                        }
+                        if (downloadDirectory != null) {
+                            safariOptions.setCapability("browser.download.dir", downloadDirectory);
                         }
                         SafariDriverService safariDriverService = new SafariDriverService.Builder().usingAnyFreePort().build();
                         driverServiceAll.add(safariDriverService);
