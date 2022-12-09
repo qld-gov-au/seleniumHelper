@@ -25,6 +25,7 @@
         <exclude name="DataflowAnomalyAnalysis"/>
         <exclude name="BeanMembersShouldSerialize"/>
         <exclude name="UseLocaleWithCaseConversions"/>
+        <exclude name="CloseResource"/>
     </rule>
     <!--<rule ref="category/java/multithreading.xml"></rule>-->
     <!--<rule ref="category/java/security.xml"></rule>-->

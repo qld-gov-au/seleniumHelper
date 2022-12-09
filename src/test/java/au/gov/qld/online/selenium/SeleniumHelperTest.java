@@ -1,8 +1,22 @@
 package au.gov.qld.online.selenium;
 
+import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.FluentWait;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,8 +38,9 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX);
-        holder.getWebDriver().navigate().to("https://example2.com/");
+        holder.getWebDriver().navigate().to("https://google.com/");
         SeleniumHelper.performScreenPrint(holder, testName);
+        SeleniumHelper.close(holder);
     }
 
     @Test
@@ -34,7 +49,7 @@ public class SeleniumHelperTest {
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX);
         WebDriverHolder holder2 = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX);
-        holder.getWebDriver().navigate().to("https://example2.com/");
+        holder.getWebDriver().navigate().to("https://google.com/");
         SeleniumHelper.performScreenPrint(holder2, testName);
         holder2.getWebDriver().navigate().to("https://www.qld.gov.au");
         SeleniumHelper.performScreenPrint(holder, testName);
@@ -55,7 +70,7 @@ public class SeleniumHelperTest {
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX);
         WebDriverHolder holder2 = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
-        holder.getWebDriver().navigate().to("https://example2.com/");
+        holder.getWebDriver().navigate().to("https://google.com/");
         SeleniumHelper.performScreenPrint(holder2, testName);
         holder2.getWebDriver().navigate().to("https://www.qld.gov.au");
         SeleniumHelper.performScreenPrint(holder, testName);
@@ -75,10 +90,10 @@ public class SeleniumHelperTest {
         SeleniumHelper.setDoScreenPrints(true);
         try {
             holder = SeleniumHelper.getWebDriver(DriverTypes.EDGE);
-            holder.getWebDriver().navigate().to("https://example2.com/");
+            holder.getWebDriver().navigate().to("https://google.com/");
             SeleniumHelper.performScreenPrint(holder, testName);
         } catch (RuntimeException e) {
-            //expected when not on windows
+            // Expected when not on windows
             assertThat(e.getMessage()).isEqualTo("Have to be on windows to run Edge");
             assertThat(e).isInstanceOf(IllegalStateException.class);
         }
@@ -90,9 +105,10 @@ public class SeleniumHelperTest {
         SeleniumHelper.setDoScreenPrints(true);
         try {
             holder = SeleniumHelper.getWebDriver(DriverTypes.SAFARI);
-            holder.getWebDriver().navigate().to("https://example2.com/");
+            holder.getWebDriver().navigate().to("https://google.com/");
             SeleniumHelper.performScreenPrint(holder, testName);
         } catch (RuntimeException e) {
+            // Expected when not on mac
             assertThat(e.getMessage()).isEqualTo("Have to be on Mac to run Safari");
             assertThat(e).isInstanceOf(IllegalStateException.class);
         }
@@ -103,7 +119,7 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
-        holder.getWebDriver().navigate().to("https://example2.com/");
+        holder.getWebDriver().navigate().to("https://google.com/");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.close(holder);
     }
@@ -113,7 +129,7 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
-        holder.getWebDriver().navigate().to("https://example2.com/");
+        holder.getWebDriver().navigate().to("https://google.com/");
         WebDriverHolder holder2 = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
         holder2.getWebDriver().navigate().to("https://www.qld.gov.au");
         SeleniumHelper.performScreenPrint(holder, testName);
@@ -125,7 +141,7 @@ public class SeleniumHelperTest {
         SeleniumHelper.performScreenPrint(holder3, testName);
         holder3.getWebDriver().navigate().to("https://www.whirlpool.net.au");
         SeleniumHelper.performScreenPrint(holder3, testName);
-        SeleniumHelper.close(holder);
+        SeleniumHelper.close(holder3);
     }
 
     @Test
@@ -133,7 +149,7 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.HtmlUnitDriver);
-        holder.getWebDriver().navigate().to("https://example2.com/");
+        holder.getWebDriver().navigate().to("https://google.com/");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.close(holder);
     }
@@ -143,7 +159,101 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.HtmlUnitDriverWithJS);
-        holder.getWebDriver().navigate().to("https://example2.com/");
+        holder.getWebDriver().navigate().to("https://www.bing.com/");
         SeleniumHelper.performScreenPrint(holder, testName);
+        SeleniumHelper.close(holder);
     }
+
+    @Test
+    public void shouldSetDownloadDirectoryForFirefoxBrowser() throws IOException {
+        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+        SeleniumHelper.setDoScreenPrints(true);
+        Path tempDownloadDirectory = Files.createTempDirectory("tempDownloads");
+        tempDownloadDirectory.toFile().deleteOnExit();
+        String downloadFilepath = tempDownloadDirectory.toFile().getAbsolutePath() + "/";
+        holder = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX, downloadFilepath);
+        holder.getWebDriver().navigate().to("about:preferences");
+        assertThat(holder.getWebDriver().findElement(new By.ByXPath("//*[@id='downloadFolder']")).getAttribute("style")).containsIgnoringCase(downloadFilepath);
+        SeleniumHelper.performScreenPrint(holder, testName);
+        SeleniumHelper.close(holder);
+    }
+
+    @Test
+    public void shouldSetDownloadDirectoryForChromeBrowser() throws IOException, InterruptedException {
+        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+        SeleniumHelper.setDoScreenPrints(true);
+        // chrome://settings/downloads uses "#shadow-root" which prevents using xpath to view the download directory, so try download instead
+        Path tempDownloadDirectory = Files.createTempDirectory("tempDownloads");
+        tempDownloadDirectory.toFile().deleteOnExit();
+        String downloadFilepath = tempDownloadDirectory.toFile().getAbsolutePath() + "/";
+        String filename = "ict-dashboard-dcyjma-dataset.csv";
+        holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME, downloadFilepath);
+        // Download a test CSV from dev.data.qld.gov.au: "ict-dashboard-dcyjma-dataset.csv"
+        holder.getWebDriver().navigate().to("https://dev.data.qld.gov.au/dataset/0aa564f0-32be-4aff-89af-565882fd4982/resource/0f623a2a-1ef3-4f7e-8a4c-45a4de31cef7/download/ict-dashboard-dcyjma-dataset.csv");
+        FluentWait<WebDriver> wait = new FluentWait<>(holder.getWebDriver()).withTimeout(Duration.ofSeconds(10L)).pollingEvery(Duration.ofMillis(100));
+        File downloadedFile = new File(downloadFilepath + filename);
+        wait.until(x -> downloadedFile.exists());
+        try {
+            Assertions.assertThat(downloadedFile).exists();
+        } catch (AssertionError e) {
+            Set<String> files = Stream.of(tempDownloadDirectory.toFile().listFiles())
+                    .filter(file -> !file.isDirectory())
+                    .map(File::getName)
+                    .collect(Collectors.toSet());
+            System.out.println("Could not find file, found: " + String.join(", ", files));
+            throw e;
+        }
+        downloadedFile.deleteOnExit();
+        SeleniumHelper.performScreenPrint(holder, testName);
+        SeleniumHelper.close(holder);
+    }
+
+    // Need Selenium 4 before custom download directory for Edge is implemented
+    /* @Test
+    public void shouldSetDownloadDirectoryForEdgeBrowser() throws IOException {
+        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+        SeleniumHelper.setDoScreenPrints(true);
+        Path tempDownloadDirectory = Files.createTempDirectory("tempDownloads");
+        tempDownloadDirectory.toFile().deleteOnExit();
+        String downloadFilepath = tempDownloadDirectory.toFile().getAbsolutePath() + "/";
+        try {
+            holder = SeleniumHelper.getWebDriver(DriverTypes.EDGE, downloadFilepath);
+            holder.getWebDriver().navigate().to("edge://settings/downloads");
+            assertThat(holder.getWebDriver().findElement(new By.ByXPath("//p[contains(text(), '" + downloadFilepath + "')]")).isDisplayed()).isTrue();
+            SeleniumHelper.performScreenPrint(holder, testName);
+        } catch (RuntimeException e) {
+            // Expected when not on windows
+            assertThat(e.getMessage()).isEqualTo("Have to be on windows to run Edge");
+            assertThat(e).isInstanceOf(IllegalStateException.class);
+        }
+        SeleniumHelper.close(holder);
+    } */
+
+    @Test
+    public void shouldSetDownloadDirectoryForSafariBrowser() throws IOException, InterruptedException {
+        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+        SeleniumHelper.setDoScreenPrints(true);
+        Path tempDownloadDirectory = Files.createTempDirectory("tempDownloads");
+        tempDownloadDirectory.toFile().deleteOnExit();
+        String downloadFilepath = tempDownloadDirectory.toFile().getAbsolutePath() + "/";
+        String filename = "ict-dashboard-dcyjma-dataset.csv";
+        // Not sure how safari has settings set up, so try download instead
+        try {
+            holder = SeleniumHelper.getWebDriver(DriverTypes.SAFARI, downloadFilepath);
+            // Download a test CSV from dev.data.qld.gov.au: "ict-dashboard-dcyjma-dataset.csv"
+            holder.getWebDriver().navigate().to("https://dev.data.qld.gov.au/dataset/0aa564f0-32be-4aff-89af-565882fd4982/resource/0f623a2a-1ef3-4f7e-8a4c-45a4de31cef7/download/ict-dashboard-dcyjma-dataset.csv");
+            TimeUnit.SECONDS.sleep(3);
+            File downloadedFile = new File(downloadFilepath + filename);
+            Assertions.assertThat(downloadedFile).exists();
+            downloadedFile.deleteOnExit();
+            SeleniumHelper.performScreenPrint(holder, testName);
+            SeleniumHelper.close(holder);
+        } catch (RuntimeException e) {
+            // Expected when not on mac
+            assertThat(e.getMessage()).isEqualTo("Have to be on Mac to run Safari");
+            assertThat(e).isInstanceOf(IllegalStateException.class);
+        }
+    }
+
+    // Custom download directories haven't beeen implemented for HtmlUnitBrowser and HtmlUnitWithJsBrowser
 }

@@ -17,14 +17,21 @@ jobs:
           distribution: 'zulu'
           java-version: ${{ matrix.java }}
           cache: 'maven'
-#      - name: Cache Maven packages
-#        uses: actions/cache@v3
-#        with:
-#          path: ~/.m2
-#          key: ${{ runner.os }}-m2-${{ hashFiles('pom.xml') }}
-#          restore-keys: ${{ runner.os }}-m2
+      - name: Get Versions
+        run: |
+          echo "Google chrome version"
+          google-chrome --version
+          echo "firefox version"
+          firefox --version
+          echo "temp folder: ${{ runner.temp }}"
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify
+        run: mvn --batch-mode --update-snapshots verify -Djava.io.tmpdir=${{ runner.temp }}
       - run: mkdir staging && cp target/*.jar staging
       - uses: actions/upload-artifact@v2
         with:
