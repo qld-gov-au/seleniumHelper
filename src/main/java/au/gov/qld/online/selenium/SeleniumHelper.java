@@ -1,6 +1,5 @@
 package au.gov.qld.online.selenium;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
@@ -96,8 +95,9 @@ public final class SeleniumHelper {
         if (StringUtils.isNotBlank(System.getProperty("http_proxy"))) {
             LOGGER.debug("proxy enabled");
             proxy = new Proxy();
-            proxy.setHttpProxy(System.getProperty("http_proxy", ""));
-            proxy.setSslProxy(System.getProperty("https_proxy", ""));
+            proxy.setProxyType(Proxy.ProxyType.MANUAL);
+            proxy.setHttpProxy(System.getProperty("http_proxy", "").replaceAll("http.*?://", ""));
+            proxy.setSslProxy(System.getProperty("https_proxy", "").replaceAll("http.*?://", ""));
         }
         Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
         try {
@@ -120,10 +120,14 @@ public final class SeleniumHelper {
     }
 
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType) {
-        //reuse any active session that was released
-        for (String key: webDriverListReleased.keySet()) {
+        return getWebDriver(driverType, null);
+    }
+
+    public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType, String downloadDirectory) {
+        //reuse any active session that was released if the download directory has not been set
+        for (String key : webDriverListReleased.keySet()) {
             WebDriverHolder driver = webDriverListReleased.get(key);
-            if (driverType.equals(driver.getDriverType())) {
+            if (driverType.equals(driver.getDriverType()) && StringUtils.equals(downloadDirectory, driver.getDownloadDirectory())) {
                 webDriverListReleased.remove(key);
                 return driver;
             }
@@ -133,15 +137,29 @@ public final class SeleniumHelper {
         WebDriverManager wdm;
         try {
             final Platform platform = Platform.getCurrent();
+            final String browserDownloadOption = "browser.download.dir";
             switch (driverType) {
                 case CHROME:
                     setupChromeService();
                     DesiredCapabilities capabilities = new DesiredCapabilities();
                     final ChromeOptions chromeOptions = new ChromeOptions();
+                    chromeOptions.addArguments("--host-resolver-rules=MAP www.google-analytics.com 127.0.0.1, www.googletagmanager.com 127.0.0.1");
                     if (headlessEnabled) {
-                        chromeOptions.setHeadless(true);
+                        chromeOptions.addArguments("--headless=new");
                     }
+                    if (downloadDirectory != null) {
+                        HashMap<String, Object> chromePrefs = new HashMap<>();
+                        chromePrefs.put("download.default_directory", downloadDirectory);
+                        chromePrefs.put("plugins.always_open_pdf_externally", true);
+                        chromePrefs.put("download.prompt_for_download", false);
+                        chromePrefs.put("profile.default_content_settings.popups", 0);
+                        chromeOptions.setExperimentalOption("prefs", chromePrefs);
+                    }
+                    chromeOptions.addArguments("--remote-allow-origins=*");
                     chromeOptions.merge(capabilities);
+                    if (proxy != null) {
+                        chromeOptions.setProxy(proxy);
+                    }
                     webDriver = new RemoteWebDriver(chromeService.getUrl(), chromeOptions);
                     break;
                 case FIREFOX:
@@ -153,6 +171,11 @@ public final class SeleniumHelper {
                     }
                     if (proxy != null) {
                         firefoxOptions.setProxy(proxy);
+                    }
+                    if (downloadDirectory != null) {
+                        firefoxOptions.addPreference("browser.download.folderList", 2);
+                        firefoxOptions.addPreference(browserDownloadOption, downloadDirectory);
+                        firefoxOptions.addPreference("browser.download.useDownloadDir", true);
                     }
                     GeckoDriverService geckoDriverService = new GeckoDriverService.Builder().usingAnyFreePort().build();
                     geckoDriverService.start();
@@ -169,6 +192,11 @@ public final class SeleniumHelper {
                         if (proxy != null) {
                             edgeOptions.setProxy(proxy);
                         }
+                        // May need Selenium 4 to set Edge download directory, msedge-selenium-tools-java could help but has many vulnerabilities
+                        //if (downloadDirectory != null) {
+                        //edgeOptions.add_experimental_option("prefs", {"download.default_directory":"downloadDirectory"});
+                        //edgeOptions.setExperimentalOption(browserDownloadOption, downloadDirectory);
+                        //}
                         EdgeDriverService edgeDriverService = new EdgeDriverService.Builder().usingAnyFreePort().build();
                         driverServiceAll.add(edgeDriverService);
                         webDriver = new EdgeDriver(edgeDriverService, edgeOptions);
@@ -185,6 +213,9 @@ public final class SeleniumHelper {
                         safariOptions.merge(safariCapabilities);
                         if (proxy != null) {
                             safariOptions.setProxy(proxy);
+                        }
+                        if (downloadDirectory != null) {
+                            safariOptions.setCapability(browserDownloadOption, downloadDirectory);
                         }
                         SafariDriverService safariDriverService = new SafariDriverService.Builder().usingAnyFreePort().build();
                         driverServiceAll.add(safariDriverService);
@@ -217,25 +248,22 @@ public final class SeleniumHelper {
             LOGGER.error("Error Message: ", e);
             throw new IllegalStateException(e);
         }
-        WebDriverHolder holder = new WebDriverHolder(webDriver, driverType);
+        WebDriverHolder holder = new WebDriverHolder(webDriver, driverType, downloadDirectory);
         webDriverListAll.add(webDriver);
         return holder;
     }
 
     private static HtmlUnitDriver createHtmlUnitDriver(final boolean enableJavascript) {
         HtmlUnitDriver driver;
-        if (enableJavascript) {
-            driver = new HtmlUnitDriver(BrowserVersion.BEST_SUPPORTED);
-            driver.setJavascriptEnabled(true);
-        } else {
-            driver = new HtmlUnitDriver(false) {
-                @Override
-                protected WebClient modifyWebClient(WebClient client) {
-                    client.getOptions().setCssEnabled(false);
-                    return client;
-                }
-            };
-        }
+        driver = new HtmlUnitDriver() {
+            @Override
+            protected WebClient modifyWebClient(WebClient client) {
+                client.getOptions().setThrowExceptionOnScriptError(false);
+                client.getOptions().setJavaScriptEnabled(enableJavascript);
+                return client;
+            }
+        };
+
         if (proxy != null) {
             driver.setProxySettings(proxy);
         }
