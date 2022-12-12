@@ -30,6 +30,7 @@ import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -137,6 +138,7 @@ public final class SeleniumHelper {
         WebDriverManager wdm;
         try {
             final Platform platform = Platform.getCurrent();
+            final String browserDownloadOption = "browser.download.dir";
             switch (driverType) {
                 case CHROME:
                     setupChromeService();
@@ -146,7 +148,7 @@ public final class SeleniumHelper {
                         chromeOptions.setHeadless(true);
                     }
                     if (downloadDirectory != null) {
-                        chromeOptions.setExperimentalOption("browser.download.dir", downloadDirectory);
+                        chromeOptions.setExperimentalOption(browserDownloadOption, downloadDirectory);
                     }
                     chromeOptions.merge(capabilities);
                     webDriver = new RemoteWebDriver(chromeService.getUrl(), chromeOptions);
@@ -162,7 +164,7 @@ public final class SeleniumHelper {
                         firefoxOptions.setProxy(proxy);
                     }
                     if (downloadDirectory != null) {
-                        firefoxOptions.addPreference("browser.download.dir", downloadDirectory);
+                        firefoxOptions.addPreference(browserDownloadOption, downloadDirectory);
                     }
                     GeckoDriverService geckoDriverService = new GeckoDriverService.Builder().usingAnyFreePort().build();
                     geckoDriverService.start();
@@ -180,7 +182,7 @@ public final class SeleniumHelper {
                             edgeOptions.setProxy(proxy);
                         }
                         if (downloadDirectory != null) {
-                            edgeOptions.setExperimentalOption("browser.download.dir", downloadDirectory);
+                            edgeOptions.setExperimentalOption(browserDownloadOption, downloadDirectory);
                         }
                         EdgeDriverService edgeDriverService = new EdgeDriverService.Builder().usingAnyFreePort().build();
                         driverServiceAll.add(edgeDriverService);
@@ -200,7 +202,7 @@ public final class SeleniumHelper {
                             safariOptions.setProxy(proxy);
                         }
                         if (downloadDirectory != null) {
-                            safariOptions.setCapability("browser.download.dir", downloadDirectory);
+                            safariOptions.setCapability(browserDownloadOption, downloadDirectory);
                         }
                         SafariDriverService safariDriverService = new SafariDriverService.Builder().usingAnyFreePort().build();
                         driverServiceAll.add(safariDriverService);
@@ -307,7 +309,7 @@ public final class SeleniumHelper {
         WebDriver driver = webDriverHolder.getWebDriver();
         if (webDriverHolder.getBrowserName().equalsIgnoreCase(DriverTypes.CHROME.name())) {
             driver.navigate().to("chrome://settings/clearBrowserData");
-            WebDriverWait waiter = new WebDriverWait(driver, 30, 500);
+            WebDriverWait waiter = new WebDriverWait(driver, Duration.ofSeconds(30), Duration.ofMillis(500));
             String ccs = "* /deep/ #clearBrowsingDataConfirm";
             waiter.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(ccs)));
             driver.findElement(By.cssSelector("* /deep/ #clearBrowsingDataConfirm")).click();
