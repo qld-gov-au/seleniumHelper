@@ -156,7 +156,7 @@
                 <exclusion><groupId>io.netty</groupId><artifactId>netty-transport-native-unix-common</artifactId></exclusion>
         </exclusions>
         </dependency>
-        <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>htmlunit-driver</artifactId><version>3.61.0</version>
+        <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>htmlunit-driver</artifactId><version>4.7.2</version>
             <exclusions>
                 <exclusion><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-api</artifactId></exclusion>
                 <exclusion><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-support</artifactId></exclusion>
