@@ -21,7 +21,7 @@ Environment Args that you can use:
 
 ### Change log
 
-Allow hand off without deleting cookies
-Allow browser reuse to be changed from default 10 to your preferred usage.
-
-Updated to selenium 4.x, support newer versions of java.
+* Allow hand off without deleting cookies
+* Allow browser reuse to be changed from default 10 to your preferred usage.
+* Updated to selenium 4.x, support newer versions of java.
+* Allow download directory to be set on browser creation
