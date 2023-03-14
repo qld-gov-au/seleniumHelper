@@ -99,8 +99,8 @@ public final class SeleniumHelper {
             LOGGER.debug("proxy enabled");
             proxy = new Proxy();
             proxy.setProxyType(Proxy.ProxyType.MANUAL);
-            proxy.setHttpProxy(System.getProperty("http_proxy", "").replaceAll("http.*?://", ""));
-            proxy.setSslProxy(System.getProperty("https_proxy", "").replaceAll("http.*?://", ""));
+            proxy.setHttpProxy(System.getProperty("http_proxy", "").replaceAll("https?://", ""));
+            proxy.setSslProxy(System.getProperty("https_proxy", "").replaceAll("https?://", ""));
         }
         Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
         try {
@@ -197,11 +197,14 @@ public final class SeleniumHelper {
                         if (proxy != null) {
                             edgeOptions.setProxy(proxy);
                         }
-                        // May need Selenium 4 to set Edge download directory, msedge-selenium-tools-java could help but has many vulnerabilities
-                        //if (downloadDirectory != null) {
-                        //edgeOptions.add_experimental_option("prefs", {"download.default_directory":"downloadDirectory"});
-                        //edgeOptions.setExperimentalOption(browserDownloadOption, downloadDirectory);
-                        //}
+                        if (downloadDirectory != null) {
+                            HashMap<String, Object> edgePrefs = new HashMap<>();
+                            edgePrefs.put("download.default_directory", downloadDirectory);
+                            edgePrefs.put("plugins.always_open_pdf_externally", true);
+                            edgePrefs.put("download.prompt_for_download", false);
+                            edgePrefs.put("profile.default_content_settings.popups", 0);
+                            edgeOptions.setExperimentalOption("prefs", edgePrefs);
+                        }
                         EdgeDriverService edgeDriverService = new EdgeDriverService.Builder().usingAnyFreePort().build();
                         driverServiceAll.add(edgeDriverService);
                         webDriver = new EdgeDriver(edgeDriverService, edgeOptions);
