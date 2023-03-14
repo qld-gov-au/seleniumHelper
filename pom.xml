@@ -91,7 +91,13 @@
                 <exclusion><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-common</artifactId></exclusion>
                 <exclusion><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-api</artifactId></exclusion>
                 <exclusion><groupId>org.eclipse.jetty</groupId><artifactId>jetty-io</artifactId></exclusion>
+                <exclusion><groupId>org.apache.httpcomponents.client5</groupId><artifactId>httpclient5</artifactId></exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.2.1</version>
         </dependency>
 
         <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>1.7.36</version></dependency>
