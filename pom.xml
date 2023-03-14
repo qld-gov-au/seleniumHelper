@@ -46,7 +46,7 @@
         <guava.version>31.1-jre</guava.version> <!-- verify this maches in selenium-chrome-driver -->
 
         <qa.directory>${project.basedir}/src/qa</qa.directory>
-        <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
+        <maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
         <checkstyle.version>10.8.1</checkstyle.version>
         <pmd.version>6.55.0</pmd.version>
         <spotbugs-maven-plugin.version>4.7.3.2</spotbugs-maven-plugin.version>
