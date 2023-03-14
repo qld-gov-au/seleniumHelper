@@ -13,17 +13,16 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
-   file name: htmlunit-cssparser-1.12.0.jar, regex for cve CVE-2020-5529 is htmlunit* which hits cssparser
+   file name: guava-30.1.1-jre.jar
+   Only vulnerable if using com.google.common.io.Files.createTempDir(), which does not appear to be in use and has been marked as deprecated in versions 30.0 and later
    ]]></notes>
-        <packageUrl regex="true">^pkg:maven/net\.sourceforge\.htmlunit/htmlunit\-cssparser@.*$</packageUrl>
-        <cpe>cpe:/a:htmlunit_project:htmlunit</cpe>
+        <cve>CVE-2020-8908</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-   file name: htmlunit-driver-2.56.0.jar
-   cve is for neko-htmlunit-driver and flags seleniumhq driver instead, so false positive
+   file names: okhttp-3.11.0.jar
+   False positive, this vulnerability is for google:android, which is not a dependency
    ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.seleniumhq\.selenium/htmlunit\-driver@.*$</packageUrl>
-        <cve>CVE-2022-29546</cve>
+        <cve>CVE-2021-0341</cve>
     </suppress>
 </suppressions>

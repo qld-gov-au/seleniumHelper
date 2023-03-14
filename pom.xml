@@ -25,7 +25,7 @@
             <url>https://nexus.tools.services.qld.gov.au/nexus/repository/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-    
+
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -39,7 +39,7 @@
         <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <maven-pmd-plugin.version>3.16.0</maven-pmd-plugin.version>
-        <owasp.dependency-check-maven.version>7.1.0</owasp.dependency-check-maven.version>
+        <owasp.dependency-check-maven.version>8.1.2</owasp.dependency-check-maven.version>
 
 
         <qa.directory>${project.basedir}/src/qa</qa.directory>
@@ -75,23 +75,30 @@
 
     <dependencies>
         <!-- overrides of wdm docker features -->
-        <dependency><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-databind</artifactId><version>2.13.2.2</version></dependency>
-        <dependency><groupId>org.bouncycastle</groupId><artifactId>bcprov-jdk15on</artifactId><version>1.70</version></dependency>
+        <dependency><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-databind</artifactId><version>2.14.2</version></dependency>
+        <dependency><groupId>org.bouncycastle</groupId><artifactId>bcprov-jdk15on</artifactId><version>1.69</version></dependency>
 
-        <dependency><groupId>io.github.bonigarcia</groupId><artifactId>webdrivermanager</artifactId><version>5.1.1</version>
-        <exclusions>
-            <exclusion><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-java</artifactId></exclusion>
-            <exclusion><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></exclusion>
-            <exclusion><groupId>com.google.guava</groupId><artifactId>guava</artifactId></exclusion>
-            <exclusion><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-databind</artifactId></exclusion>
-            <exclusion><groupId>org.bouncycastle</groupId><artifactId>bcprov-jdk15on</artifactId></exclusion>
-            <exclusion><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-client</artifactId></exclusion>
-            <exclusion><groupId>org.eclipse.jetty</groupId><artifactId>jetty-util</artifactId></exclusion>
-            <exclusion><groupId>org.eclipse.jetty</groupId><artifactId>jetty-http</artifactId></exclusion>
-            <exclusion><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-common</artifactId></exclusion>
-            <exclusion><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-api</artifactId></exclusion>
-            <exclusion><groupId>org.eclipse.jetty</groupId><artifactId>jetty-io</artifactId></exclusion>
-        </exclusions></dependency>
+        <dependency><groupId>io.github.bonigarcia</groupId><artifactId>webdrivermanager</artifactId><version>5.3.2</version>
+            <exclusions>
+                <exclusion><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-java</artifactId></exclusion>
+                <exclusion><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></exclusion>
+                <exclusion><groupId>com.google.guava</groupId><artifactId>guava</artifactId></exclusion>
+                <exclusion><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-databind</artifactId></exclusion>
+                <exclusion><groupId>org.bouncycastle</groupId><artifactId>bcprov-jdk15on</artifactId></exclusion>
+                <exclusion><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-client</artifactId></exclusion>
+                <exclusion><groupId>org.eclipse.jetty</groupId><artifactId>jetty-util</artifactId></exclusion>
+                <exclusion><groupId>org.eclipse.jetty</groupId><artifactId>jetty-http</artifactId></exclusion>
+                <exclusion><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-common</artifactId></exclusion>
+                <exclusion><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-api</artifactId></exclusion>
+                <exclusion><groupId>org.eclipse.jetty</groupId><artifactId>jetty-io</artifactId></exclusion>
+                <exclusion><groupId>org.apache.httpcomponents.client5</groupId><artifactId>httpclient5</artifactId></exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.2.1</version>
+        </dependency>
 
         <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>1.7.36</version></dependency>
         <dependency><groupId>com.google.guava</groupId><artifactId>guava</artifactId><version>31.1-jre</version></dependency>
@@ -100,8 +107,8 @@
                 <exclusion><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-opera-driver</artifactId></exclusion>
                 <exclusion><groupId>com.google.guava</groupId><artifactId>guava</artifactId></exclusion></exclusions>
         </dependency>
-        <dependency><groupId>net.sourceforge.htmlunit</groupId><artifactId>htmlunit</artifactId><version>2.61.0</version></dependency>
-        <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>htmlunit-driver</artifactId><version>2.56.0</version>
+        <dependency><groupId>net.sourceforge.htmlunit</groupId><artifactId>htmlunit</artifactId><version>2.70.0</version></dependency>
+        <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>htmlunit-driver</artifactId><version>2.70.0</version>
             <exclusions><exclusion><groupId>net.sourceforge.htmlunit</groupId><artifactId>htmlunit</artifactId></exclusion></exclusions>
         </dependency>
         <dependency><scope>test</scope><groupId>junit</groupId><artifactId>junit</artifactId><version>4.13.2</version></dependency>
@@ -168,9 +175,6 @@
                 <!-- The path for the properties file to be generated. See Super Pom for default variable reference https://maven.apache.org/guides/introduction/introduction-to-the-pom.html -->
                 <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
             </configuration>
-        </plugin>
-        <plugin>
-            <groupId>org.jacoco</groupId><artifactId>jacoco-maven-plugin</artifactId>
         </plugin>
 
         <!--Set up to ignore integration tests-->
