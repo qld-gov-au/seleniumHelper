@@ -42,7 +42,7 @@
         <maven-pmd-plugin.version>3.20.0</maven-pmd-plugin.version>
         <owasp.dependency-check-maven.version>8.1.2</owasp.dependency-check-maven.version>
 
-        <io.netty.version>4.1.87.Final</io.netty.version> <!-- verify this matches in org.seleniumhq.selenium:selenium-remote-driver -->
+        <io.netty.version>4.1.91.Final</io.netty.version> <!-- verify this matches in org.seleniumhq.selenium:selenium-remote-driver -->
         <guava.version>31.1-jre</guava.version> <!-- verify this maches in selenium-chrome-driver -->
 
         <qa.directory>${project.basedir}/src/qa</qa.directory>
