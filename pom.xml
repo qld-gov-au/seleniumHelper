@@ -70,6 +70,7 @@
         <dependencies>
             <dependency><scope>import</scope><type>pom</type><groupId>io.netty</groupId><artifactId>netty-bom</artifactId><version>${io.netty.version}</version></dependency>
             <dependency><scope>import</scope><type>pom</type><groupId>com.google.guava</groupId><artifactId>guava-bom</artifactId><version>${guava.version}</version></dependency>
+            <dependency><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-client</artifactId><version>9.4.51.v20230217</version></dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -115,7 +116,7 @@
                 <exclusion><groupId>com.google.code.findbugs</groupId><artifactId>jsr305</artifactId></exclusion>
             </exclusions>
         </dependency>
-        <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>htmlunit-driver</artifactId><version>4.8.0</version>
+        <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>htmlunit-driver</artifactId><version>4.8.3</version>
             <exclusions>
                 <exclusion><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-api</artifactId></exclusion>
                 <exclusion><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-support</artifactId></exclusion>
