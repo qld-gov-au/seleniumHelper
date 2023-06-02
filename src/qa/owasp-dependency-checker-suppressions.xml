@@ -17,6 +17,7 @@
    Only vulnerable if using com.google.common.io.Files.createTempDir(), which does not appear to be in use and has been marked as deprecated in versions 30.0 and later
    ]]></notes>
         <cve>CVE-2020-8908</cve>
+        <cve>CVE-2023-2976</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -24,5 +25,18 @@
    False positive, this vulnerability is for google:android, which is not a dependency
    ]]></notes>
         <cve>CVE-2021-0341</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: htmlunit-driver-2.70.0.jar, neko-htmlunit-2.70.0.jar, htmlunit-core-js-2.70.0.jar
+   ]]></notes>
+        <cve>CVE-2023-26119</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jetty-io-9.4.50.v20221201.jar, websocket-client-9.4.50.v20221201.jar, websocket-common-9.4.50.v20221201.jar
+   ]]></notes>
+        <cve>CVE-2023-26048</cve>
+        <cve>CVE-2023-26049</cve>
     </suppress>
 </suppressions>

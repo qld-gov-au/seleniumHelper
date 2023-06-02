@@ -144,6 +144,11 @@ public final class SeleniumHelper {
                     DesiredCapabilities capabilities = new DesiredCapabilities();
                     final ChromeOptions chromeOptions = new ChromeOptions();
                     chromeOptions.addArguments("--host-resolver-rules=MAP www.google-analytics.com 127.0.0.1, www.googletagmanager.com 127.0.0.1");
+                    chromeOptions.addArguments("--disable-gpu");
+                    chromeOptions.addArguments("--no-sandbox");
+                    chromeOptions.addArguments("--disable-extensions");
+                    chromeOptions.addArguments("--disable-dev-shm-usage");
+                    chromeOptions.addArguments("--crash-dumps-dir=/tmp");
                     if (headlessEnabled) {
                         chromeOptions.addArguments("--headless=new");
                     }
