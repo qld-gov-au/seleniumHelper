@@ -51,7 +51,7 @@ public class SeleniumHelperTest {
         WebDriverHolder holder2 = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX);
         holder.getWebDriver().navigate().to("https://google.com/");
         SeleniumHelper.performScreenPrint(holder2, testName);
-        holder2.getWebDriver().navigate().to("https://www.qld.gov.au");
+        holder2.getWebDriver().navigate().to("https://site-down.services.qld.gov.au");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.performScreenPrint(holder2, testName);
         SeleniumHelper.close(holder);
@@ -72,7 +72,7 @@ public class SeleniumHelperTest {
         WebDriverHolder holder2 = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
         holder.getWebDriver().navigate().to("https://google.com/");
         SeleniumHelper.performScreenPrint(holder2, testName);
-        holder2.getWebDriver().navigate().to("https://www.qld.gov.au");
+        holder2.getWebDriver().navigate().to("https://site-down.services.qld.gov.au");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.performScreenPrint(holder2, testName);
         SeleniumHelper.close(holder);
@@ -131,7 +131,7 @@ public class SeleniumHelperTest {
         holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
         holder.getWebDriver().navigate().to("https://google.com/");
         WebDriverHolder holder2 = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
-        holder2.getWebDriver().navigate().to("https://www.qld.gov.au");
+        holder2.getWebDriver().navigate().to("https://site-down.services.qld.gov.au");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.performScreenPrint(holder2, testName);
         SeleniumHelper.close(holder);
@@ -186,10 +186,10 @@ public class SeleniumHelperTest {
         Path tempDownloadDirectory = Files.createTempDirectory("tempDownloads");
         tempDownloadDirectory.toFile().deleteOnExit();
         String downloadFilepath = tempDownloadDirectory.toFile().getAbsolutePath() + "/";
-        String filename = "ict-dashboard-dcyjma-dataset.csv";
+        String filename = "testfile.xlsx";
         holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME, downloadFilepath);
-        // Download a test CSV from dev.data.qld.gov.au: "ict-dashboard-dcyjma-dataset.csv"
-        holder.getWebDriver().navigate().to("https://dev.data.qld.gov.au/dataset/0aa564f0-32be-4aff-89af-565882fd4982/resource/0f623a2a-1ef3-4f7e-8a4c-45a4de31cef7/download/ict-dashboard-dcyjma-dataset.csv");
+        // Download a test file from staging.data.qld.gov.au: "testfile.xlsx"
+        holder.getWebDriver().navigate().to("https://staging.data.qld.gov.au/dataset/534a6213-bc2e-4b79-a8da-95438adf47f9/resource/c5098e4c-994d-48d7-a12b-c69c876897cc/download/testfile.xlsx");
         FluentWait<WebDriver> wait = new FluentWait<>(holder.getWebDriver()).withTimeout(Duration.ofSeconds(10L)).pollingEvery(Duration.ofMillis(100));
         File downloadedFile = new File(downloadFilepath + filename);
         wait.until(x -> downloadedFile.exists());
@@ -236,12 +236,12 @@ public class SeleniumHelperTest {
         Path tempDownloadDirectory = Files.createTempDirectory("tempDownloads");
         tempDownloadDirectory.toFile().deleteOnExit();
         String downloadFilepath = tempDownloadDirectory.toFile().getAbsolutePath() + "/";
-        String filename = "ict-dashboard-dcyjma-dataset.csv";
+        String filename = "testfile.xlsx";
         // Not sure how safari has settings set up, so try download instead
         try {
             holder = SeleniumHelper.getWebDriver(DriverTypes.SAFARI, downloadFilepath);
-            // Download a test CSV from dev.data.qld.gov.au: "ict-dashboard-dcyjma-dataset.csv"
-            holder.getWebDriver().navigate().to("https://dev.data.qld.gov.au/dataset/0aa564f0-32be-4aff-89af-565882fd4982/resource/0f623a2a-1ef3-4f7e-8a4c-45a4de31cef7/download/ict-dashboard-dcyjma-dataset.csv");
+            // Download a test file from staging.data.qld.gov.au: "testfile.xlsx"
+            holder.getWebDriver().navigate().to("https://staging.data.qld.gov.au/dataset/534a6213-bc2e-4b79-a8da-95438adf47f9/resource/c5098e4c-994d-48d7-a12b-c69c876897cc/download/testfile.xlsx");
             TimeUnit.SECONDS.sleep(3);
             File downloadedFile = new File(downloadFilepath + filename);
             Assertions.assertThat(downloadedFile).exists();
