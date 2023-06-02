@@ -67,7 +67,7 @@
             <dependency><scope>import</scope><type>pom</type><groupId>com.google.guava</groupId><artifactId>guava-bom</artifactId><version>${guava.version}</version></dependency>
             <dependency><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-client</artifactId><version>9.4.51.v20230217</version></dependency>
             <dependency><scope>import</scope><type>pom</type><groupId>org.assertj</groupId><artifactId>assertj-bom</artifactId><version>3.24.2</version></dependency>
-            <dependency><groupId>net.bytebuddy</groupId><artifactId>byte-buddy</artifactId><version>1.12.22</version>
+            <dependency><groupId>net.bytebuddy</groupId><artifactId>byte-buddy</artifactId><version>1.14.5</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
