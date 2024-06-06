@@ -72,7 +72,7 @@
         <dependency><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-databind</artifactId><version>2.14.2</version></dependency>
         <dependency><groupId>org.bouncycastle</groupId><artifactId>bcprov-jdk15on</artifactId><version>1.69</version></dependency>
 
-        <dependency><groupId>io.github.bonigarcia</groupId><artifactId>webdrivermanager</artifactId><version>5.3.3</version>
+        <dependency><groupId>io.github.bonigarcia</groupId><artifactId>webdrivermanager</artifactId><version>5.8.0</version>
             <exclusions>
                 <exclusion><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-java</artifactId></exclusion>
                 <exclusion><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></exclusion>
@@ -86,6 +86,8 @@
                 <exclusion><groupId>org.eclipse.jetty.websocket</groupId><artifactId>websocket-api</artifactId></exclusion>
                 <exclusion><groupId>org.eclipse.jetty</groupId><artifactId>jetty-io</artifactId></exclusion>
                 <exclusion><groupId>org.apache.httpcomponents.client5</groupId><artifactId>httpclient5</artifactId></exclusion>
+                <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></exclusion>
+                <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-compress</artifactId></exclusion>
             </exclusions>
         </dependency>
         <dependency>
