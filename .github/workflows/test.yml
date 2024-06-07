@@ -5,26 +5,26 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SEGMENT_DOWNLOAD_TIMEOUT_MINS: '5'
     steps:
       - uses: actions/checkout@v4
-
-      - name: Cache Maven packages
-        id: cache-nvm
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          save-always: true
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: '21'
+
+      - name: Cache Maven packages
+        id: cache-maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          save-always: true
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}
 
       - name: Get Versions
         run: |
