@@ -12,19 +12,23 @@ on:
   workflow_dispatch:
     inputs:
       force:
-        type: choice
         description: Retry Publish Version
-        options:
-          - No
-          - Yes
+        default: '0'
 
 jobs:
   build:
+    env:
+      #When run on push tags, force is '', default for workflow_dispatch is No so you can't trigger without a double action
+      DO_DEPLOYMENT: ${{ github.event_name != 'workflow_dispatch'  || github.event.inputs.force == '1' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     strategy:
       matrix:
         jdk: [ '21' ]
-    name: Publich Package to GPR
+    name: Publish Package to GPR
     steps:
       - uses: actions/checkout@v4
 
@@ -53,75 +57,11 @@ jobs:
           echo "temp folder: ${{ runner.temp }}"
 
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify -Djava.io.tmpdir=${{ runner.temp }}
-        env:
-            NVD_NIST_APIKEY: ${{ secrets.NVD_NIST_APIKEY}}
-
-      - run: mkdir dist && cp target/*.jar dist
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Package
-          path: dist
-
-
-  publish-gpr:
-    needs: build
-    env:
-      #When run on push tags, force is '', default for workflow_dispatch is No so you can't trigger without a double action
-      DO_DEPLOYMENT: ${{ github.event_name != 'workflow_dispatch'  || github.event.inputs.force == 'Yes' }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu' # See 'Supported distributions' for available options
-          java-version: '21'
-
-      - name: Cache Maven packages
-        id: cache-maven
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-#          save-always: true
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}
-
-      - name: Get Versions
-        run: |
-          echo "Google chrome version"
-          google-chrome --version
-          echo "firefox version"
-          firefox --version
-          echo "temp folder: ${{ runner.temp }}"
-
-      - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify -Djava.io.tmpdir=${{ runner.temp }}
-
-      - run: mkdir dist && cp target/*.jar dist
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Package
-          path: dist
-
-      - name: Publish package
-        run: mvn --batch-mode deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish
-        run: npm publish --provenance --access=public --tag ${{ steps.latest_tag.outputs.latest-tag }}
+        run: mvn --batch-mode --update-snapshots deploy -Djava.io.tmpdir=${{ runner.temp }}
         if: ${{ env.DO_DEPLOYMENT == 'true' }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NVD_NIST_APIKEY: ${{ secrets.NVD_NIST_APIKEY}}
 
       - name: Publish - Skipped
         if: ${{ env.DO_DEPLOYMENT != 'true' }}
