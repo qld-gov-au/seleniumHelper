@@ -435,6 +435,7 @@
                     <suppressionFile>${qa.directory}/owasp-dependency-checker-suppressions.xml</suppressionFile>
                     <failBuildOnCVSS>2</failBuildOnCVSS>
                     <skip>${dependency.skip}</skip>
+                    <nvdApiKey>${env.NVD_NIST_APIKEY}</nvdApiKey>
                     <bundleAuditAnalyzerEnabled>false</bundleAuditAnalyzerEnabled>
                 </configuration>
                 <executions>
