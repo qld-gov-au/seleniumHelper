@@ -187,12 +187,24 @@ public final class SeleniumHelper {
                         firefoxOptions.addPreference(browserDownloadOption, downloadDirectory);
                         firefoxOptions.addPreference("browser.download.useDownloadDir", true);
                     }
+
+                    // Create a new Firefox profile
+                    FirefoxProfile profile = new FirefoxProfile();
+
+                    // Set the homepage to about:blank
+                    final String aboutBlank = "about:blank";
+                    profile.setPreference("browser.startup.homepage", aboutBlank);
+                    profile.setPreference("startup.homepage_welcome_url", aboutBlank);
+                    profile.setPreference("startup.homepage_welcome_url.additional", aboutBlank);
+
+                    // Disable restoring previous session
+                    profile.setPreference("browser.sessionstore.resume_from_crash", false);
+
+                    firefoxOptions.setProfile(profile);
                     GeckoDriverService geckoDriverService = new GeckoDriverService.Builder().usingAnyFreePort().build();
                     geckoDriverService.start();
                     driverServiceAll.add(geckoDriverService);
                     webDriver = new FirefoxDriver(geckoDriverService, firefoxOptions);
-                    //can't wrap remotewebdriver for firefox but chrome etc can
-                    //webDriver = new RemoteWebDriver(firefoxService.getUrl(), firefoxOptions);
                     break;
                 case EDGE:
                     if (platform.is(WINDOWS)) {
