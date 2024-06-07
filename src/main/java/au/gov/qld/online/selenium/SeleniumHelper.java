@@ -1,9 +1,9 @@
 package au.gov.qld.online.selenium;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.htmlunit.WebClient;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -31,7 +31,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 import static org.openqa.selenium.Platform.MAC;
 import static org.openqa.selenium.Platform.WINDOWS;
@@ -58,6 +58,7 @@ public final class SeleniumHelper {
     /**
      * This cleans up anything that used this helper class
      */
+    @SuppressWarnings("PMD.UseTryWithResources") //can't as its a list opened in another place
     private static final Thread CLOSE_THREAD = new Thread() {
         @Override
         public void run() {
@@ -77,6 +78,8 @@ public final class SeleniumHelper {
                         service.stop();
                     } catch (Exception e) {
                         LOGGER.error("exception on close", e);
+                    } finally {
+                        service.close();
                     }
                 }
             }
@@ -105,6 +108,7 @@ public final class SeleniumHelper {
             if (screenprintCurrentFolder.exists()) {
                 FileUtils.forceDelete(screenprintCurrentFolder);
             }
+            screenprintFolder.setWritable(true);
             Files.createSymbolicLink(Paths.get(screenprintCurrentFolder.getAbsolutePath()), Paths.get(screenprintFolder.getAbsolutePath()));
         } catch (IOException e) {
             LOGGER.error("could not create screenprint folder");
@@ -119,6 +123,7 @@ public final class SeleniumHelper {
         return screenprintFolder;
     }
 
+    @SuppressWarnings("PMD.CloseResource") //CloseResource is done on CLOSE_THREAD
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType) {
         return getWebDriver(driverType, null);
     }
@@ -153,7 +158,7 @@ public final class SeleniumHelper {
                         chromeOptions.addArguments("--headless=new");
                     }
                     if (downloadDirectory != null) {
-                        HashMap<String, Object> chromePrefs = new HashMap<>();
+                        Map<String, Object> chromePrefs = new HashMap<>();
                         chromePrefs.put("download.default_directory", downloadDirectory);
                         chromePrefs.put("plugins.always_open_pdf_externally", true);
                         chromePrefs.put("download.prompt_for_download", false);
@@ -172,7 +177,7 @@ public final class SeleniumHelper {
                     wdm.setup();
                     final FirefoxOptions firefoxOptions = new FirefoxOptions();
                     if (headlessEnabled) {
-                        firefoxOptions.setHeadless(true);
+                        firefoxOptions.addArguments("-headless");
                     }
                     if (proxy != null) {
                         firefoxOptions.setProxy(proxy);
@@ -182,12 +187,24 @@ public final class SeleniumHelper {
                         firefoxOptions.addPreference(browserDownloadOption, downloadDirectory);
                         firefoxOptions.addPreference("browser.download.useDownloadDir", true);
                     }
+
+                    // Create a new Firefox profile
+                    FirefoxProfile profile = new FirefoxProfile();
+
+                    // Set the homepage to about:blank
+                    final String aboutBlank = "about:blank";
+                    profile.setPreference("browser.startup.homepage", aboutBlank);
+                    profile.setPreference("startup.homepage_welcome_url", aboutBlank);
+                    profile.setPreference("startup.homepage_welcome_url.additional", aboutBlank);
+
+                    // Disable restoring previous session
+                    profile.setPreference("browser.sessionstore.resume_from_crash", false);
+
+                    firefoxOptions.setProfile(profile);
                     GeckoDriverService geckoDriverService = new GeckoDriverService.Builder().usingAnyFreePort().build();
                     geckoDriverService.start();
                     driverServiceAll.add(geckoDriverService);
                     webDriver = new FirefoxDriver(geckoDriverService, firefoxOptions);
-                    //can't wrap remotewebdriver for firefox but chrome etc can
-                    //webDriver = new RemoteWebDriver(firefoxService.getUrl(), firefoxOptions);
                     break;
                 case EDGE:
                     if (platform.is(WINDOWS)) {
@@ -197,11 +214,14 @@ public final class SeleniumHelper {
                         if (proxy != null) {
                             edgeOptions.setProxy(proxy);
                         }
-                        // May need Selenium 4 to set Edge download directory, msedge-selenium-tools-java could help but has many vulnerabilities
-                        //if (downloadDirectory != null) {
-                        //edgeOptions.add_experimental_option("prefs", {"download.default_directory":"downloadDirectory"});
-                        //edgeOptions.setExperimentalOption(browserDownloadOption, downloadDirectory);
-                        //}
+                        if (downloadDirectory != null) {
+                            Map<String, Object> edgePrefs = new HashMap<>();
+                            edgePrefs.put("download.default_directory", downloadDirectory);
+                            edgePrefs.put("plugins.always_open_pdf_externally", true);
+                            edgePrefs.put("download.prompt_for_download", false);
+                            edgePrefs.put("profile.default_content_settings.popups", 0);
+                            edgeOptions.setExperimentalOption("prefs", edgePrefs);
+                        }
                         EdgeDriverService edgeDriverService = new EdgeDriverService.Builder().usingAnyFreePort().build();
                         driverServiceAll.add(edgeDriverService);
                         webDriver = new EdgeDriver(edgeDriverService, edgeOptions);
@@ -240,10 +260,10 @@ public final class SeleniumHelper {
             }
 
             webDriver.manage().deleteAllCookies();
-            webDriver.manage().timeouts().pageLoadTimeout(360, TimeUnit.SECONDS);
+            webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(360));
             webDriver.manage().window().maximize();
             Dimension maximizeDim = webDriver.manage().window().getSize();
-            LOGGER.info("Size of screen. Height: " + maximizeDim.getHeight() + ", Width:" + maximizeDim.getWidth());
+            LOGGER.info("Size of screen. Height: {}, Width: {}", maximizeDim.getHeight(), maximizeDim.getWidth());
         } catch (RuntimeException ex) {
             LOGGER.error("Exception in initiating a browser session");
             LOGGER.error("Error Message: ", ex);
@@ -324,7 +344,8 @@ public final class SeleniumHelper {
         WebDriver driver = webDriverHolder.getWebDriver();
         if (webDriverHolder.getBrowserName().equalsIgnoreCase(DriverTypes.CHROME.name())) {
             driver.navigate().to("chrome://settings/clearBrowserData");
-            WebDriverWait waiter = new WebDriverWait(driver, 30, 500);
+
+            WebDriverWait waiter = new WebDriverWait(driver, Duration.ofSeconds(30), Duration.ofSeconds(500));
             String ccs = "* /deep/ #clearBrowsingDataConfirm";
             waiter.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(ccs)));
             driver.findElement(By.cssSelector("* /deep/ #clearBrowsingDataConfirm")).click();

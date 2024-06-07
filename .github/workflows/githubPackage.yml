@@ -55,6 +55,8 @@ jobs:
 
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots verify -Djava.io.tmpdir=${{ runner.temp }}
+        env:
+            NVD_NIST_APIKEY: ${{ secrets.NVD_NIST_APIKEY}}
 
       - run: mkdir dist && cp target/*.jar dist
 
