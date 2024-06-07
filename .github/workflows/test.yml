@@ -18,10 +18,10 @@ jobs:
 
       - name: Cache Maven packages
         id: cache-maven
-        uses: actions/cache@v4
+        uses: actions/cache@v2
         with:
           path: ~/.m2/repository
-          save-always: true
+#          save-always: true
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}
