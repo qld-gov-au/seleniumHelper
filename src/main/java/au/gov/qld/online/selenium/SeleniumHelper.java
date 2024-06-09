@@ -174,13 +174,15 @@ public final class SeleniumHelper {
                     break;
                 case FIREFOX:
                     wdm = WebDriverManager.firefoxdriver();
-                    wdm.setup();
                     final FirefoxOptions firefoxOptions = new FirefoxOptions();
-                    if (headlessEnabled) {
-                        firefoxOptions.addArguments("-headless");
-                    }
+                    wdm.config().setTimeout(30);
                     if (proxy != null) {
                         firefoxOptions.setProxy(proxy);
+                        wdm.config().setProxy(proxy.getHttpProxy());
+                    }
+                    wdm.setup();
+                    if (headlessEnabled) {
+                        firefoxOptions.addArguments("-headless");
                     }
                     if (downloadDirectory != null) {
                         firefoxOptions.addPreference("browser.download.folderList", 2);
@@ -209,11 +211,13 @@ public final class SeleniumHelper {
                 case EDGE:
                     if (platform.is(WINDOWS)) {
                         wdm = WebDriverManager.edgedriver();
-                        wdm.setup();
+                        wdm.config().setTimeout(30);
                         final EdgeOptions edgeOptions = new EdgeOptions();
                         if (proxy != null) {
                             edgeOptions.setProxy(proxy);
+                            wdm.config().setProxy(proxy.getHttpProxy());
                         }
+                        wdm.setup();
                         if (downloadDirectory != null) {
                             Map<String, Object> edgePrefs = new HashMap<>();
                             edgePrefs.put("download.default_directory", downloadDirectory);
@@ -232,13 +236,15 @@ public final class SeleniumHelper {
                 case SAFARI:
                     if (platform.is(MAC)) {
                         wdm = WebDriverManager.edgedriver();
-                        wdm.setup();
+                        wdm.config().setTimeout(30);
                         DesiredCapabilities safariCapabilities = new DesiredCapabilities();
                         final SafariOptions safariOptions = new SafariOptions();
                         safariOptions.merge(safariCapabilities);
                         if (proxy != null) {
                             safariOptions.setProxy(proxy);
+                            wdm.config().setProxy(proxy.getHttpProxy());
                         }
+                        wdm.setup();
                         if (downloadDirectory != null) {
                             safariOptions.setCapability(browserDownloadOption, downloadDirectory);
                         }
@@ -389,6 +395,10 @@ public final class SeleniumHelper {
         }
 
         WebDriverManager wdm = WebDriverManager.chromedriver();
+        wdm.config().setTimeout(30);
+        if (proxy != null) {
+            wdm.config().setProxy(proxy.getHttpProxy());
+        }
         wdm.setup();
         chromeService = new ChromeDriverService.Builder()
             .usingDriverExecutable(new File(wdm.getDownloadedDriverPath()))
