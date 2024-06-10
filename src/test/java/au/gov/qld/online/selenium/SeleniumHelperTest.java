@@ -35,7 +35,7 @@ public class SeleniumHelperTest {
     }
 
     @Test
-    @Disabled("ubuntu has issues on profile popup which you can't get past atm")
+    //@Disabled("ubuntu has issues on profile popup which you can't get past atm")
     public void shouldStartFirefoxBrowser() {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
@@ -46,7 +46,6 @@ public class SeleniumHelperTest {
     }
 
     @Test
-    @Disabled
     public void shouldStartFirefoxBrowserMultiTest() {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
@@ -68,7 +67,6 @@ public class SeleniumHelperTest {
     }
 
     @Test
-    @Disabled
     public void shouldStartFirefoxChromeBrowserMultiMixTest() {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
@@ -170,7 +168,6 @@ public class SeleniumHelperTest {
     }
 
     @Test
-    @Disabled
     public void shouldSetDownloadDirectoryForFirefoxBrowser() throws IOException {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
