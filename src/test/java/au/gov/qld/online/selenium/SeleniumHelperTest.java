@@ -3,7 +3,6 @@ package au.gov.qld.online.selenium;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -35,7 +35,7 @@ public class SeleniumHelperTest {
     }
 
     @Test
-    @Disabled("ubuntu has issues on profile popup which you can't get past atm")
+    //@Disabled("ubuntu has issues on profile popup which you can't get past atm")
     public void shouldStartFirefoxBrowser() {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
@@ -46,7 +46,6 @@ public class SeleniumHelperTest {
     }
 
     @Test
-    @Disabled
     public void shouldStartFirefoxBrowserMultiTest() {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
@@ -64,11 +63,9 @@ public class SeleniumHelperTest {
         holder3.getWebDriver().navigate().to("https://www.whirlpool.net.au");
         SeleniumHelper.performScreenPrint(holder3, testName);
         SeleniumHelper.close(holder);
-        int afterStart = SeleniumHelper.openDrivers();
     }
 
     @Test
-    @Disabled
     public void shouldStartFirefoxChromeBrowserMultiMixTest() {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
@@ -159,7 +156,6 @@ public class SeleniumHelperTest {
     }
 
     @Test
-    @Disabled
     public void shouldStartHtmlUnitWithJsBrowser() {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
@@ -170,7 +166,6 @@ public class SeleniumHelperTest {
     }
 
     @Test
-    @Disabled
     public void shouldSetDownloadDirectoryForFirefoxBrowser() throws IOException {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
@@ -202,7 +197,7 @@ public class SeleniumHelperTest {
         try {
             Assertions.assertThat(downloadedFile).exists();
         } catch (AssertionError e) {
-            Set<String> files = Stream.of(tempDownloadDirectory.toFile().listFiles())
+            Set<String> files = Stream.of(Objects.requireNonNull(tempDownloadDirectory.toFile().listFiles()))
                     .filter(file -> !file.isDirectory())
                     .map(File::getName)
                     .collect(Collectors.toSet());
