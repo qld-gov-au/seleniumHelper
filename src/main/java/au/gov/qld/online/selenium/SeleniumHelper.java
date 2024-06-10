@@ -74,12 +74,10 @@ public final class SeleniumHelper {
             }
             for (DriverService service : driverServiceAll) {
                 if (service != null) {
-                    try {
+                    try (service) {
                         service.stop();
                     } catch (Exception e) {
                         LOGGER.error("exception on close", e);
-                    } finally {
-                        service.close();
                     }
                 }
             }
@@ -138,7 +136,7 @@ public final class SeleniumHelper {
             }
         }
 
-        WebDriver webDriver = null;
+        WebDriver webDriver;
         WebDriverManager wdm;
         try {
             final Platform platform = Platform.getCurrent();
@@ -174,33 +172,21 @@ public final class SeleniumHelper {
                     break;
                 case FIREFOX:
                     wdm = WebDriverManager.firefoxdriver();
-                    wdm.setup();
                     final FirefoxOptions firefoxOptions = new FirefoxOptions();
-                    if (headlessEnabled) {
-                        firefoxOptions.addArguments("-headless");
-                    }
+                    wdm.config().setTimeout(30);
                     if (proxy != null) {
                         firefoxOptions.setProxy(proxy);
+                        wdm.config().setProxy(proxy.getHttpProxy());
+                    }
+                    wdm.setup();
+                    if (headlessEnabled) {
+                        firefoxOptions.addArguments("-headless");
                     }
                     if (downloadDirectory != null) {
                         firefoxOptions.addPreference("browser.download.folderList", 2);
                         firefoxOptions.addPreference(browserDownloadOption, downloadDirectory);
                         firefoxOptions.addPreference("browser.download.useDownloadDir", true);
                     }
-
-                    // Create a new Firefox profile
-                    FirefoxProfile profile = new FirefoxProfile();
-
-                    // Set the homepage to about:blank
-                    final String aboutBlank = "about:blank";
-                    profile.setPreference("browser.startup.homepage", aboutBlank);
-                    profile.setPreference("startup.homepage_welcome_url", aboutBlank);
-                    profile.setPreference("startup.homepage_welcome_url.additional", aboutBlank);
-
-                    // Disable restoring previous session
-                    profile.setPreference("browser.sessionstore.resume_from_crash", false);
-
-                    firefoxOptions.setProfile(profile);
                     GeckoDriverService geckoDriverService = new GeckoDriverService.Builder().usingAnyFreePort().build();
                     geckoDriverService.start();
                     driverServiceAll.add(geckoDriverService);
@@ -209,11 +195,13 @@ public final class SeleniumHelper {
                 case EDGE:
                     if (platform.is(WINDOWS)) {
                         wdm = WebDriverManager.edgedriver();
-                        wdm.setup();
+                        wdm.config().setTimeout(30);
                         final EdgeOptions edgeOptions = new EdgeOptions();
                         if (proxy != null) {
                             edgeOptions.setProxy(proxy);
+                            wdm.config().setProxy(proxy.getHttpProxy());
                         }
+                        wdm.setup();
                         if (downloadDirectory != null) {
                             Map<String, Object> edgePrefs = new HashMap<>();
                             edgePrefs.put("download.default_directory", downloadDirectory);
@@ -232,13 +220,15 @@ public final class SeleniumHelper {
                 case SAFARI:
                     if (platform.is(MAC)) {
                         wdm = WebDriverManager.edgedriver();
-                        wdm.setup();
+                        wdm.config().setTimeout(30);
                         DesiredCapabilities safariCapabilities = new DesiredCapabilities();
                         final SafariOptions safariOptions = new SafariOptions();
                         safariOptions.merge(safariCapabilities);
                         if (proxy != null) {
                             safariOptions.setProxy(proxy);
+                            wdm.config().setProxy(proxy.getHttpProxy());
                         }
+                        wdm.setup();
                         if (downloadDirectory != null) {
                             safariOptions.setCapability(browserDownloadOption, downloadDirectory);
                         }
@@ -389,6 +379,10 @@ public final class SeleniumHelper {
         }
 
         WebDriverManager wdm = WebDriverManager.chromedriver();
+        wdm.config().setTimeout(30);
+        if (proxy != null) {
+            wdm.config().setProxy(proxy.getHttpProxy());
+        }
         wdm.setup();
         chromeService = new ChromeDriverService.Builder()
             .usingDriverExecutable(new File(wdm.getDownloadedDriverPath()))
