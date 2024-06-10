@@ -28,6 +28,7 @@
         <resource.delimiter>@</resource.delimiter>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <selenium.version>4.21.0</selenium.version>
 
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
@@ -54,94 +55,46 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>3.3.0</version>
-                <type>pom</type>
                 <scope>import</scope>
+                <type>pom</type>
+                <groupId>org.springframework.boot</groupId><artifactId>spring-boot-dependencies</artifactId><version>3.3.0</version>
             </dependency>
             <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-bom</artifactId>
-                <version>3.26.0</version>
-                <type>pom</type>
                 <scope>import</scope>
+                <type>pom</type>
+                <groupId>org.assertj</groupId><artifactId>assertj-bom</artifactId><version>3.26.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
         <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>5.8.0</version>
+            <groupId>io.github.bonigarcia</groupId><artifactId>webdrivermanager</artifactId><version>5.8.0</version>
             <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-annotations</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.github.docker-java</groupId>
-                    <artifactId>docker-java</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-io</groupId>
-                    <artifactId>commons-io</artifactId>
-                </exclusion>
+                <exclusion><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></exclusion>
+                <exclusion><groupId>com.google.guava</groupId><artifactId>guava</artifactId></exclusion>
+                <exclusion><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-annotations</artifactId></exclusion>
+                <exclusion><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></exclusion>
+                <exclusion><groupId>com.github.docker-java</groupId><artifactId>docker-java</artifactId></exclusion>
+                <exclusion><groupId>commons-io</groupId><artifactId>commons-io</artifactId></exclusion>
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>4.21.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>htmlunit3-driver</artifactId>
-            <version>4.21.0</version>
-        </dependency>
+        <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-java</artifactId><version>${selenium.version}</version></dependency>
+        <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>htmlunit3-driver</artifactId><version>${selenium.version}</version></dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
+        <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></dependency>
 
-        <dependency>
-            <scope>test</scope>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
-        <dependency>
-            <scope>test</scope>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-        <dependency>
-            <scope>test</scope>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-        </dependency>
+        <dependency><scope>test</scope><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId></dependency>
+        <dependency><scope>test</scope><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter-api</artifactId></dependency>
+        <dependency><scope>test</scope><groupId>org.assertj</groupId><artifactId>assertj-core</artifactId></dependency>
     </dependencies>
 
     <build>
         <plugins>
             <!-- Disabled while upgrading to ensure it compiles. -->
             <plugin>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.5.0</version>
+                <artifactId>maven-enforcer-plugin</artifactId><version>3.5.0</version>
                 <executions>
                     <execution>
                         <id>enforce</id>
@@ -158,23 +111,16 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
+                <artifactId>maven-compiler-plugin</artifactId><version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <release>${java.version}</release>
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
-            </plugin>
-
+            <plugin><groupId>org.jacoco</groupId><artifactId>jacoco-maven-plugin</artifactId><version>${jacoco.version}</version></plugin>
 
             <plugin>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.10</version>
+                <artifactId>maven-eclipse-plugin</artifactId><version>2.10</version>
                 <configuration>
                     <downloadSources>true</downloadSources>
                     <downloadJavadocs>false</downloadJavadocs>
@@ -183,9 +129,7 @@
             </plugin>
 
             <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <version>${git-commit-id-plugin.version}</version>
+                <groupId>pl.project13.maven</groupId><artifactId>git-commit-id-plugin</artifactId><version>${git-commit-id-plugin.version}</version>
                 <configuration>
                     <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
                     <!-- this is false by default, forces the plugin to generate the git.properties file -->
@@ -199,8 +143,7 @@
             <!--Set up to ignore integration tests-->
             <!-- mvn clean test -->
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
+                <artifactId>maven-surefire-plugin</artifactId><version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <skipTests>${surefire.skip}</skipTests>
                     <systemPropertyVariables>
@@ -212,14 +155,9 @@
             <!-- integration tests which are not cumcumber mvn verify or mvn integration-test run's theses
              turn off with -Dskip.failsafe.tests=false -->
             <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven-failsafe-plugin.version}</version>
+                <artifactId>maven-failsafe-plugin</artifactId><version>${maven-failsafe-plugin.version}</version>
                 <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit47</artifactId>
-                        <version>${maven-failsafe-plugin.version}</version>
-                    </dependency>
+                    <dependency><groupId>org.apache.maven.surefire</groupId><artifactId>surefire-junit47</artifactId><version>${maven-failsafe-plugin.version}</version></dependency>
                 </dependencies>
                 <executions>
                     <execution>
@@ -230,48 +168,29 @@
                         </goals>
                         <configuration>
                             <skipITs>${failsafe.skip}</skipITs>
-
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
+            <plugin><artifactId>maven-checkstyle-plugin</artifactId><version>${maven-checkstyle-plugin.version}</version></plugin>
 
-            <plugin>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven-checkstyle-plugin.version}</version>
-            </plugin>
+            <plugin><artifactId>maven-pmd-plugin</artifactId><version>${maven-pmd-plugin.version}</version></plugin>
 
-            <plugin>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${maven-pmd-plugin.version}</version>
-            </plugin>
-
-            <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>${owasp.dependency-check-maven.version}</version>
-            </plugin>
+            <plugin><groupId>com.github.spotbugs</groupId><artifactId>spotbugs-maven-plugin</artifactId></plugin>
+            <plugin><groupId>org.owasp</groupId><artifactId>dependency-check-maven</artifactId><version>${owasp.dependency-check-maven.version}</version></plugin>
         </plugins>
 
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler-plugin.version}</version>
+                    <groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><version>${maven-compiler-plugin.version}</version>
                     <configuration>
                         <release>${java.version}</release>
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>${jacoco.version}</version>
+                    <groupId>org.jacoco</groupId><artifactId>jacoco-maven-plugin</artifactId><version>${jacoco.version}</version>
                     <executions>
                         <!--
                             Prepares the property pointing to the JaCoCo runtime agent which
@@ -382,8 +301,7 @@
                 </plugin>
 
                 <plugin>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>${checkstyle.version}</version>
+                    <artifactId>maven-checkstyle-plugin</artifactId><version>${checkstyle.version}</version>
                     <dependencies>
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
@@ -398,7 +316,6 @@
                         <excludes>
                             node_modules,src/main/webapp/WEB-INF/eligibility-checklist/node_modules,src/main/webapp/WEB-INF/eligibility-checklist/dist.tar.gz
                         </excludes>
-
                     </configuration>
                     <executions>
                         <execution>
@@ -412,19 +329,10 @@
                 </plugin>
 
                 <plugin>
-                    <artifactId>maven-pmd-plugin</artifactId>
-                    <version>${maven-pmd-plugin.version}</version>
+                    <artifactId>maven-pmd-plugin</artifactId><version>${maven-pmd-plugin.version}</version>
                     <dependencies>
-                        <dependency>
-                            <groupId>net.sourceforge.pmd</groupId>
-                            <artifactId>pmd-core</artifactId>
-                            <version>${pmd.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>net.sourceforge.pmd</groupId>
-                            <artifactId>pmd-java</artifactId>
-                            <version>${pmd.version}</version>
-                        </dependency>
+                        <dependency><groupId>net.sourceforge.pmd</groupId><artifactId>pmd-core</artifactId><version>${pmd.version}</version></dependency>
+                        <dependency><groupId>net.sourceforge.pmd</groupId><artifactId>pmd-java</artifactId><version>${pmd.version}</version></dependency>
                     </dependencies>
                     <configuration>
                         <includeTests>false</includeTests>
@@ -448,25 +356,15 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>com.github.spotbugs</groupId>
-                    <artifactId>spotbugs-maven-plugin</artifactId>
-                    <version>${spotbugs-maven-plugin.version}</version>
+                    <groupId>com.github.spotbugs</groupId><artifactId>spotbugs-maven-plugin</artifactId><version>${spotbugs-maven-plugin.version}</version>
                     <configuration>
                         <excludeFilterFile>${qa.directory}/findbugs-exclude.xml</excludeFilterFile>
                         <effort>Max</effort>
                         <threshold>High</threshold>
                         <includeTests>true</includeTests>
                         <plugins>
-                            <plugin>
-                                <groupId>com.h3xstream.findsecbugs</groupId>
-                                <artifactId>findsecbugs-plugin</artifactId>
-                                <version>${findsecbugs-plugin.version}</version>
-                            </plugin>
-                            <plugin>
-                                <groupId>com.mebigfatguy.sb-contrib</groupId>
-                                <artifactId>sb-contrib</artifactId>
-                                <version>${sb-contrib.version}</version>
-                            </plugin>
+                            <plugin><groupId>com.h3xstream.findsecbugs</groupId><artifactId>findsecbugs-plugin</artifactId><version>${findsecbugs-plugin.version}</version></plugin>
+                            <plugin><groupId>com.mebigfatguy.sb-contrib</groupId><artifactId>sb-contrib</artifactId><version>${sb-contrib.version}</version></plugin>
                         </plugins>
                     </configuration>
                     <executions>
@@ -481,9 +379,7 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>org.owasp</groupId>
-                    <artifactId>dependency-check-maven</artifactId>
-                    <version>${owasp.dependency-check-maven.version}</version>
+                    <groupId>org.owasp</groupId><artifactId>dependency-check-maven</artifactId><version>${owasp.dependency-check-maven.version}</version>
                     <configuration>
                         <suppressionFile>${qa.directory}/owasp-dependency-checker-suppressions.xml</suppressionFile>
                         <failBuildOnCVSS>2</failBuildOnCVSS>
@@ -503,6 +399,7 @@
             </plugins>
         </pluginManagement>
     </build>
+
     <profiles>
         <profile>
             <id>github</id>
