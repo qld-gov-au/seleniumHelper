@@ -4,10 +4,10 @@ import org.openqa.selenium.WebDriver;
 
 public class WebDriverHolder {
 
-    private WebDriver webDriver;
-    private DriverTypes driverType;
+    private final WebDriver webDriver;
+    private final DriverTypes driverType;
     private int numberUsed = 0;
-    private String downloadDirectory;
+    private final String downloadDirectory;
 
     public WebDriverHolder(WebDriver webDriver, DriverTypes driverType, String downloadDirectory) {
         this.webDriver = webDriver;

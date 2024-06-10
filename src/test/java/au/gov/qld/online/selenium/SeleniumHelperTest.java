@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -62,7 +63,6 @@ public class SeleniumHelperTest {
         holder3.getWebDriver().navigate().to("https://www.whirlpool.net.au");
         SeleniumHelper.performScreenPrint(holder3, testName);
         SeleniumHelper.close(holder);
-        int afterStart = SeleniumHelper.openDrivers();
     }
 
     @Test
@@ -197,7 +197,7 @@ public class SeleniumHelperTest {
         try {
             Assertions.assertThat(downloadedFile).exists();
         } catch (AssertionError e) {
-            Set<String> files = Stream.of(tempDownloadDirectory.toFile().listFiles())
+            Set<String> files = Stream.of(Objects.requireNonNull(tempDownloadDirectory.toFile().listFiles()))
                     .filter(file -> !file.isDirectory())
                     .map(File::getName)
                     .collect(Collectors.toSet());
