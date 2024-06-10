@@ -45,12 +45,12 @@ public final class SeleniumHelper {
     private static DriverService chromeService;
 
     //Keep list of released browsers to reuse until max usage is hit
-    private static final Map<String, WebDriverHolder> webDriverListReleased = new ConcurrentHashMap<>();
+    private static Map<String, WebDriverHolder> webDriverListReleased = new ConcurrentHashMap<>();
     //Keep internal tabs on open browsers so when we die unexpectedly we don't leave orphaned browsers running on outside of jvm connection
-    private static final List<WebDriver> webDriverListAll = new LinkedList<>();
-    private static final List<DriverService> driverServiceAll = new LinkedList<>();
-    private static final File screenprintFolder = new File("target/screenprints/" + new SimpleDateFormat("dd-M-yyyy", Locale.getDefault()).format(new Date()) + "/");
-    private static final File screenprintCurrentFolder = new File("target/screenprints/current");
+    private static List<WebDriver> webDriverListAll = new LinkedList<>();
+    private static List<DriverService> driverServiceAll = new LinkedList<>();
+    private static File screenprintFolder = new File("target/screenprints/" + new SimpleDateFormat("dd-M-yyyy", Locale.getDefault()).format(new Date()) + "/");
+    private static File screenprintCurrentFolder = new File("target/screenprints/current");
     private static boolean doScreenPrints = false;
     private static boolean headlessEnabled = true;
 
