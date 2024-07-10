@@ -57,11 +57,6 @@
             <dependency>
                 <scope>import</scope>
                 <type>pom</type>
-                <groupId>org.springframework.boot</groupId><artifactId>spring-boot-dependencies</artifactId><version>3.3.1</version>
-            </dependency>
-            <dependency>
-                <scope>import</scope>
-                <type>pom</type>
                 <groupId>org.assertj</groupId><artifactId>assertj-bom</artifactId><version>3.26.0</version>
             </dependency>
         </dependencies>
@@ -73,26 +68,25 @@
             <exclusions>
                 <exclusion><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></exclusion>
                 <exclusion><groupId>com.google.guava</groupId><artifactId>guava</artifactId></exclusion>
-                <exclusion><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-annotations</artifactId></exclusion>
-                <exclusion><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></exclusion>
                 <exclusion><groupId>com.github.docker-java</groupId><artifactId>docker-java</artifactId></exclusion>
+                <exclusion><groupId>com.github.docker-java</groupId><artifactId>docker-java-transport-httpclient5</artifactId></exclusion>
                 <exclusion><groupId>commons-io</groupId><artifactId>commons-io</artifactId></exclusion>
+                <exclusion><groupId>commons-codec</groupId><artifactId>commons-codec</artifactId></exclusion>
             </exclusions>
         </dependency>
 
         <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-java</artifactId><version>${selenium.version}</version></dependency>
         <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>htmlunit3-driver</artifactId><version>${selenium.version}</version></dependency>
 
-        <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></dependency>
+        <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>2.0.13</version></dependency>
 
-        <dependency><scope>test</scope><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId></dependency>
-        <dependency><scope>test</scope><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter-api</artifactId></dependency>
+        <dependency><scope>test</scope><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><version>1.5.6</version></dependency>
+        <dependency><scope>test</scope><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter-api</artifactId><version>5.10.3</version></dependency>
         <dependency><scope>test</scope><groupId>org.assertj</groupId><artifactId>assertj-core</artifactId></dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Disabled while upgrading to ensure it compiles. -->
             <plugin>
                 <artifactId>maven-enforcer-plugin</artifactId><version>3.5.0</version>
                 <executions>
