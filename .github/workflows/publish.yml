@@ -204,13 +204,16 @@ jobs:
           ls -l ./target/checkout/target || true
           ls -l ./target/checkout/commons/target || true
 
+
       - name: Release
         continue-on-error: true
         if: ${{ env.DO_DEPLOYMENT == 'true' }}
-        run: gh release create "v${releaseversion}" **/target/*${releaseversion}* --generate-notes --verify-tag
+        run: |
+          gh release create "v${releaseversion}" ./target/checkout/target/*${releaseversion}* --generate-notes --verify-tag || gh release create "v${releaseversion}" --generate-notes --verify-tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           releaseversion: ${{ github.event.inputs.releaseversion }}
+
 
       - name: Cache NVD Database
         uses: actions/cache/save@v4
