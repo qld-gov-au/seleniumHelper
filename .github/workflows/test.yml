@@ -15,16 +15,16 @@ jobs:
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: '21'
+          cache: 'maven'
 
-      - name: Cache Maven packages
-        id: cache-maven
-        uses: actions/cache@v2
+      - name: Cache NVD Database
+        id: cache-nvd
+        uses: actions/cache/restore@v4
         with:
-          path: ~/.m2/repository
-#          save-always: true
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: nvd-cache-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
-            ${{ runner.os }}
+            nvd-cache-${{ runner.os }}-
 
       - name: Get Versions
         run: |
@@ -39,9 +39,23 @@ jobs:
         env:
             NVD_NIST_APIKEY: ${{ secrets.NVD_NIST_APIKEY}}
 
-      - run: mkdir dist && cp target/*.jar dist
+      - name: Package artifacts
+        run: |
+         mkdir staging
+         cp  */target/*.jar staging
+         cp -rf */target/*reports staging
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
           name: Package
-          path: dist
+          path: staging
+          overwrite: true
+
+      - name: Cache NVD Database
+        uses: actions/cache/save@v4
+        if: ${{ always() }}
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: nvd-cache-${{ runner.os }}-${{ github.run_id }}
+

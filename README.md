@@ -82,3 +82,10 @@ is as follows:
 * Allow hand off without deleting cookies
 * Allow browser reuse to be changed from default 10 to your preferred usage.
 * Allow download directory to be set on browser creation
+
+
+
+
+### How to release a new version
+
+See [DEPLOYMENT.md](DEPLOYMENT.md)
