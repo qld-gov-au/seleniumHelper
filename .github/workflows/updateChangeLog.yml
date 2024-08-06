@@ -43,11 +43,4 @@ jobs:
           git add .
           git commit -m"Update changelog"
           git push origin update-changelog --force
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          title: "Update Changelog"
-          body: "Update changelog to reflect release changes"
-          branch: update-changelog
-          base: main
+          gh pr create --title "Update Changelog" --body "Update changelog to reflect release changes" --base main
