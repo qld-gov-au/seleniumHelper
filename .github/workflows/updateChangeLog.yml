@@ -15,9 +15,11 @@ jobs:
   updateChangelog:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
           fetch-depth: 0
+
       - name: Update Changelog
         # https://github.com/git-chglog/git-chglog#getting-started
         run: ./.github/bin/updateChangeLog.sh
@@ -26,7 +28,7 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           commit-message: "Update changelog"
-          title: "Update Changelog}"
+          title: "Update Changelog"
           body: "Update changelog to reflect release changes"
           branch: update-changelog
           base: main
