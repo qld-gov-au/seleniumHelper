@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v4.23.0.003"></a>
+## [v4.23.0.003] - 2024-08-06
+### Pull Requests
+- Merge pull request [#471](https://github.com/qld-gov-au/kiteworks-integration/issues/471) from qld-gov-au/update-changelog
+  
+  
 <a name="v4.23.0.2"></a>
 ## [v4.23.0.2] - 2024-08-06
 ### Pull Requests
@@ -344,7 +350,8 @@
 - Merge pull request [#1](https://github.com/qld-gov-au/kiteworks-integration/issues/1) from qld-gov-au/develop
   
   
-[Unreleased]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.23.0.2...HEAD
+[Unreleased]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.23.0.003...HEAD
+[v4.23.0.003]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.23.0.2...v4.23.0.003
 [v4.23.0.2]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.23.0.1...v4.23.0.2
 [v4.23.0.1]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.21.0.002...v4.23.0.1
 [v4.21.0.002]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.21.0.003...v4.21.0.002
