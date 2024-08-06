@@ -2,6 +2,19 @@
 ## [Unreleased]
 
 
+<a name="v4.23.0.1"></a>
+## [v4.23.0.1] - 2024-08-06
+### Pull Requests
+- Merge pull request [#469](https://github.com/qld-gov-au/kiteworks-integration/issues/469) from qld-gov-au/update-changelog
+  - Merge pull request [#468](https://github.com/qld-gov-au/kiteworks-integration/issues/468) from qld-gov-au/develop
+  - Merge pull request [#456](https://github.com/qld-gov-au/kiteworks-integration/issues/456) from qld-gov-au/dependabot/maven/develop/com.github.spotbugs-spotbugs-maven-plugin-4.8.6.2
+  - Merge pull request [#461](https://github.com/qld-gov-au/kiteworks-integration/issues/461) from qld-gov-au/dependabot/maven/develop/maven-failsafe-plugin.version-3.3.1
+  - Merge pull request [#463](https://github.com/qld-gov-au/kiteworks-integration/issues/463) from qld-gov-au/dependabot/maven/develop/org.apache.maven.plugins-maven-pmd-plugin-3.24.0
+  - Merge pull request [#458](https://github.com/qld-gov-au/kiteworks-integration/issues/458) from qld-gov-au/dependabot/maven/develop/org.assertj-assertj-bom-3.26.3
+  - Merge pull request [#462](https://github.com/qld-gov-au/kiteworks-integration/issues/462) from qld-gov-au/dependabot/maven/develop/org.apache.maven.plugins-maven-surefire-plugin-3.3.1
+  - Merge pull request [#467](https://github.com/qld-gov-au/kiteworks-integration/issues/467) from qld-gov-au/dependabot/maven/develop/pmd.version-7.4.0
+  
+  
 <a name="v4.21.0.002"></a>
 ## [v4.21.0.002] - 2024-08-06
 ### Pull Requests
@@ -325,7 +338,8 @@
 - Merge pull request [#1](https://github.com/qld-gov-au/kiteworks-integration/issues/1) from qld-gov-au/develop
   
   
-[Unreleased]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.21.0.002...HEAD
+[Unreleased]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.23.0.1...HEAD
+[v4.23.0.1]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.21.0.002...v4.23.0.1
 [v4.21.0.002]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.21.0.003...v4.21.0.002
 [v4.21.0.003]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.21.0.002-SNAPSHOT...v4.21.0.003
 [v4.21.0.002-SNAPSHOT]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.21.0.001...v4.21.0.002-SNAPSHOT
