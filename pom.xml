@@ -56,7 +56,7 @@
             <dependency>
                 <scope>import</scope>
                 <type>pom</type>
-                <groupId>org.assertj</groupId><artifactId>assertj-bom</artifactId><version>3.26.0</version>
+                <groupId>org.assertj</groupId><artifactId>assertj-bom</artifactId><version>3.26.3</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
