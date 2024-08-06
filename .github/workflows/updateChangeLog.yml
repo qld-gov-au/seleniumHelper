@@ -44,3 +44,5 @@ jobs:
           git commit -m"Update changelog"
           git push origin update-changelog --force
           gh pr create --title "Update Changelog" --body "Update changelog to reflect release changes" --base main
+        env:
+          GH_TOKEN: ${{ github.token }}
