@@ -215,11 +215,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           releaseversion: ${{ github.event.inputs.releaseversion }}
 
-      - uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: '${{ github.workspace }}/target/checkout/target/*${releaseversion}*'
+      - name: setup attest artifacts
+        if: always()
+        run: |
+          mkdir staging
+          cp target/checkout/target/*${releaseversion}* staging/.
         env:
           releaseversion: ${{ github.event.inputs.releaseversion }}
+
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: '${{ github.workspace }}/staging'
 
       - name: Cache NVD Database
         uses: actions/cache/save@v4
