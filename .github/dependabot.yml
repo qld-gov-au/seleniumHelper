@@ -8,3 +8,8 @@ updates:
     timezone: "Australia/Brisbane"
   open-pull-requests-limit: 10
   target-branch: "develop"
+  groups:
+    selenium:
+      patterns:
+        - "*selenium*"
+        - "*webdrivermanager*"
