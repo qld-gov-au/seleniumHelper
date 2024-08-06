@@ -37,11 +37,15 @@ jobs:
           git config --global tag.gpgSign true
           git config --global gpg.program gpg
 
+      - name: Create branch/commit
+        run: |
+          git checkout -b update-changelog
+          git add .
+          git commit -m"Update changelog"
+          git push origin update-changelog --force
+
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: "Update changelog"
           title: "Update Changelog"
           body: "Update changelog to reflect release changes"
-          branch: update-changelog
-          base: main
